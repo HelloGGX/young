@@ -1,18 +1,30 @@
 import axios from 'axios'
 import qs from 'qs'
 import store from 'store/index'
+import router from './router/router'
 
 axios.defaults.baseURL = 'http://localhost:8081/api/'
 axios.defaults.timeout = 5000
 
 const request = axios.create()
+let CancelToken = axios.CancelToken // 取消请求
 
 request.interceptors.request.use(
   (config) => {
-    // 在请求或响应被 then 或 catch 处理前拦截它们。
-    // 在发送请求之前做些什么
+  // 在请求或响应被 then 或 catch 处理前拦截它们。
+  // 在发送请求之前做些什么
+    let requestName = config.data.requestName
+    if (requestName) {
+      if (axios[requestName] && axios[requestName].cancel) {
+        axios[requestName].cancel()
+      }
+      config.cancelToken = new CancelToken(c => {
+        axios[requestName] = {}
+        axios[requestName].cancel = c
+      })
+    }
     if (config.showLoading) {
-      store.commit('SET_LOADING', { isLoading: true })
+      store.commit('SET_LOADING', true)
     }
     config.data = qs.stringify(config.data)
     config.headers = {
@@ -20,35 +32,72 @@ request.interceptors.request.use(
     }
     return config
   },
-  function (error) {
-    // 对请求错误做些什么
-    return Promise.reject(error)
+  (error) => {
+    return Promise.error(error)
   }
 )
 
 // 添加响应拦截器
 request.interceptors.response.use(
   (response) => {
-    // 对响应数据做点什么
+  // 对响应数据做点什么
     if (response.config.showLoading) {
       setTimeout(function () {
-        store.commit('SET_LOADING', { isLoading: false })
+        store.commit('SET_LOADING', false)
       }, 800)
     }
     // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
     // 否则的话抛出错误
     response.status === 200 ? Promise.resolve(response) : Promise.reject(response)
   },
+  // 服务器状态码不是200的情况
   (error) => {
-    const { response } = error
-    if (response) {
-      // 请求已发出，但是不在2xx的范围
-      return Promise.reject(response)
+    if (error && error.response) {
+      switch (error.response.status) {
+        // 401: 未登录
+        // 未登录则跳转登录页面，并携带当前页面的路径
+        // 在登录成功后返回当前页面，这一步需要在登录页操作。
+        case 401:
+          router.replace({
+            path: '/login',
+            query: { redirect: router.currentRoute.fullPath }
+          })
+          break
+          // 403 token过期
+          // 登录过期对用户进行提示
+          // 清除本地token和清空vuex中token对象
+          // 跳转登录页面
+        case 403:
+
+          error.message = '登录过期，请重新登录'
+
+          // 清除token
+          localStorage.removeItem('token')
+          store.commit('loginSuccess', false)
+          // 跳转登录页面，并将要浏览的页面fullPath传过去，登录成功后跳转需要访问的页面
+          setTimeout(() => {
+            router.replace({
+              path: '/login',
+              query: {
+                redirect: router.currentRoute.fullPath
+              }
+            })
+          }, 1000)
+          break
+          // 404请求不存在
+        case 404:
+          error.message = '网络请求不存在'
+          break
+          // 其他错误，直接抛出错误提示
+        default:
+          error.message = error.response.data.message
+      }
+      return Promise.reject(error.response)
     } else {
-      // 处理断网的情况
-      // eg:请求超时或断网时，更新state的network状态
-      // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
-      // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
+    // 处理断网的情况
+    // eg:请求超时或断网时，更新state的network状态
+    // network状态在app.vue中控制着一个全局的断网提示组件的显示隐藏
+    // 关于断网组件中的刷新重新获取数据，会在断网组件中说明
       store.commit('SET_NETWORK', false)
     }
   }

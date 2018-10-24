@@ -1,2 +1,3 @@
 export const SET_LOADING = 'SET_LOADING'
 export const SET_NETWORK = 'SET_NETWORK'
+export const SET_LOGINSUCESS = 'SET_LOGINSUCESS'

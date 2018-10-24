@@ -7,6 +7,8 @@ import './registerServiceWorker'
 import fastclick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
 
+import 'common/less/index.less'
+
 fastclick.attach(document.body)
 
 Vue.use(VueLazyload, {
@@ -16,12 +18,12 @@ Vue.use(VueLazyload, {
 })
 
 router.beforeEach(function (to, from, next) {
-  store.commit('SET_LOADING', { isLoading: true })
+  store.commit('SET_LOADING', true)
   next()
 })
 
 router.afterEach(function (to) {
-  store.commit('SET_LOADING', { isLoading: false })
+  store.commit('SET_LOADING', false)
 })
 
 Vue.config.productionTip = false
