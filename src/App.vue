@@ -8,6 +8,21 @@
   </div>
 </template>
 
+<script type='text/ecmascript-6'>
+import { mapState } from 'vuex'
+
+export default {
+  components: {
+  },
+
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    })
+  }
+}
+</script>
+
 <style lang="less">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
