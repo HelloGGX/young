@@ -39,7 +39,7 @@ export default {
 </script>
 <style scoped lang="less">
   @import '../../common/less/transition.less';
-
+  @import '../../common/less/variable.less';
 .toast {
     position: fixed;
     z-index: 5001;
@@ -80,18 +80,7 @@ export default {
 .loading_toast .toast__content {
     margin-top: 0;
     margin: 0 0 15px;
-    font-size: 16px;
-}
-.mask-enter, .mask-leave-active,
-.mask-leave-active, .mask-enter-active {
-  position: relative;
-  z-index: 1;
-}
-.mask-enter, .mask-leave-active {
-  opacity: 0;
-}
-.mask-leave-active, .mask-enter-active {
-  transition: opacity 300ms;
+    font-size: @font-size-medium;
 }
 .loading-no-text .toast {
   min-height: 98px;

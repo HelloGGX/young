@@ -41,4 +41,15 @@ body, html {
     right: 0;
     left: 0;
     bottom: 0;
-}  
+} 
+.mask-enter, .mask-leave-active,
+.mask-leave-active, .mask-enter-active {
+  position: relative;
+  z-index: 1;
+}
+.mask-enter, .mask-leave-active {
+  opacity: 0;
+}
+.mask-leave-active, .mask-enter-active {
+  transition: opacity 300ms;
+} 
