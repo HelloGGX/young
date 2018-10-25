@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <tab></tab>
+    <m-header :title="title"></m-header>
     <transition name="transition">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </transition>
+    <tab></tab>
     <loading  :show="isLoading" ></loading>
   </div>
 </template>
@@ -14,6 +15,7 @@
 import { mapGetters } from 'vuex'
 import Loading from 'base/loading/loading'
 import Tab from 'components/tab/tab'
+import MHeader from 'components/m-header/m-header'
 
 export default {
   data () {
@@ -23,10 +25,16 @@ export default {
   },
   components: {
     Loading,
-    Tab
+    Tab,
+    MHeader
   },
-
+  mounted () {
+    console.log(this.title)
+  },
   computed: {
+    title () {
+      return this.$route.name
+    },
     ...mapGetters(['isLoading'])
   }
 }

@@ -5,21 +5,40 @@ Vue.use(Router)
 
 const home = () => import(/* webpackChunkName: "home" */ 'views/home')
 const line = () => import(/* webpackChunkName: "line" */ 'views/line')
-
+const add = () => import(/* webpackChunkName: "add" */ 'views/add')
+const like = () => import(/* webpackChunkName: "like" */ 'views/like')
+const me = () => import(/* webpackChunkName: "me" */ 'views/me')
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: '首页',
+      component: home
+    },
+    {
+      path: '/home',
+      name: '首页',
       component: home
     },
     {
       path: '/line',
-      name: 'line',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      name: '路线',
       component: line
+    },
+    {
+      path: '/add',
+      name: '新增',
+      component: add
+    },
+    {
+      path: '/like',
+      name: '收藏',
+      component: like
+    },
+    {
+      path: '/me',
+      name: '个人中心',
+      component: me
     }
   ]
 })
