@@ -4,7 +4,7 @@
     <div class="tab-items" >
       <router-link tag="div" class="tab-item" to="/home">
         <span class="tab-link">
-          <i class="iconfont icon-homepage"></i>
+          <i class="iconw icon-w15"></i>
         </span>
       </router-link>
       <router-link tag="div" class="tab-item" to="/line">
@@ -42,6 +42,7 @@ export default {
 
 </script>
 <style lang='less' scoped>
+ @import '../../common/less/variable.less';
 .tab {
     z-index: 10000!important;
     position: fixed;
@@ -87,21 +88,24 @@ export default {
             // }
           }
         }
-        &.router-link-active {
+        &.active {
               .tab-link {
                 i {
-                  color: #262628;
-                  &.icon-homepage:before {
-                    content: "\E71C"!important;
+                  color: @color-day-2;
+                  &.icon-w15:before {
+                    content: "\e617"!important;
                   }
                   &.icon-coordinates:before {
-                      content: "\E6F8"!important;
+                    content: "\E6F8"!important;
+                  }
+                  &.icon-add:before {
+                    font-weight: 700;
                   }
                   &.icon-like:before {
-                      content: "\E725"!important;
+                    content: "\E725"!important;
                   }
                   &.icon-people:before {
-                      content: "\E73C"!important;
+                    content: "\E73C"!important;
                   }
                 }
 

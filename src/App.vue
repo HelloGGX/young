@@ -28,9 +28,6 @@ export default {
     Tab,
     MHeader
   },
-  mounted () {
-    console.log(this.title)
-  },
   computed: {
     title () {
       return this.$route.name
@@ -42,4 +39,5 @@ export default {
 
 <style lang="less">
   @import 'common/less/transition.less';
+
 </style>

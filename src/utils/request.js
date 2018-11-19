@@ -1,9 +1,9 @@
 import axios from 'axios'
 import qs from 'qs'
 import store from 'store/index'
-import router from './router/router'
+import router from 'router/router'
 
-axios.defaults.baseURL = 'http://localhost:8081/api/'
+axios.defaults.baseURL = 'https://wis.qq.com/weather'
 axios.defaults.timeout = 5000
 
 const request = axios.create()
@@ -114,6 +114,7 @@ class Request {
     return new Promise((resolve, reject) => {
       request
         .then((res) => {
+          console.log(res)
           const data = res.data
           if (!data) {
             return reject(this.createError(400, 'no data'))

@@ -1,20 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-
-Vue.use(Router)
+import App from '../App'
 
 const home = () => import(/* webpackChunkName: "home" */ 'views/home')
 const line = () => import(/* webpackChunkName: "line" */ 'views/line')
 const add = () => import(/* webpackChunkName: "add" */ 'views/add')
 const like = () => import(/* webpackChunkName: "like" */ 'views/like')
 const me = () => import(/* webpackChunkName: "me" */ 'views/me')
-export default new Router({
-  routes: [
+
+export default [{
+  path: '/',
+  component: App, // 顶层路由，对应index.html
+  children: [// 二级路由。对应App.vue
+    // 地址为空时跳转home页面
     {
-      path: '/',
-      name: '首页',
-      component: home
+      path: '',
+      redirect: '/home'
     },
+    // 首页城市列表页
     {
       path: '/home',
       name: '首页',
@@ -41,4 +42,4 @@ export default new Router({
       component: me
     }
   ]
-})
+}]
