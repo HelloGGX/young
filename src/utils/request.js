@@ -1,34 +1,34 @@
 import axios from 'axios'
-import qs from 'qs'
+// import qs from 'qs'
 import store from 'store/index'
 import router from 'router/router'
 
-axios.defaults.baseURL = 'https://wis.qq.com/weather'
+axios.defaults.baseURL = 'https://api.mlwei.com'
 axios.defaults.timeout = 5000
 
 const request = axios.create()
-let CancelToken = axios.CancelToken // 取消请求
+// let CancelToken = axios.CancelToken // 取消请求
 
 request.interceptors.request.use(
   (config) => {
-  // 在请求或响应被 then 或 catch 处理前拦截它们。
-  // 在发送请求之前做些什么
-    let requestName = config.data.requestName
-    if (requestName) {
-      if (axios[requestName] && axios[requestName].cancel) {
-        axios[requestName].cancel()
-      }
-      config.cancelToken = new CancelToken(c => {
-        axios[requestName] = {}
-        axios[requestName].cancel = c
-      })
-    }
+    // 在请求或响应被 then 或 catch 处理前拦截它们。
+    // 在发送请求之前做些什么
+    // let requestName = config.data.requestName
+    // if (requestName) {
+    //   if (axios[requestName] && axios[requestName].cancel) {
+    //     axios[requestName].cancel()
+    //   }
+    //   config.cancelToken = new CancelToken(c => {
+    //     axios[requestName] = {}
+    //     axios[requestName].cancel = c
+    //   })
+    // }
     if (config.showLoading) {
       store.commit('SET_LOADING', true)
     }
-    config.data = qs.stringify(config.data)
+    // config.data = qs.stringify(config.data)
     config.headers = {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     }
     return config
   },
@@ -40,7 +40,7 @@ request.interceptors.request.use(
 // 添加响应拦截器
 request.interceptors.response.use(
   (response) => {
-  // 对响应数据做点什么
+    // 对响应数据做点什么
     if (response.config.showLoading) {
       setTimeout(function () {
         store.commit('SET_LOADING', false)
@@ -48,7 +48,7 @@ request.interceptors.response.use(
     }
     // 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
     // 否则的话抛出错误
-    response.status === 200 ? Promise.resolve(response) : Promise.reject(response)
+    return response.status === 200 ? Promise.resolve(response) : Promise.reject(response)
   },
   // 服务器状态码不是200的情况
   (error) => {
@@ -103,18 +103,17 @@ request.interceptors.response.use(
   }
 )
 
-class Request {
-  createError = (code, resp) => {
+class Db {
+  createError (code, resp) {
     const err = new Error(resp.message)
     err.code = code
     return err
   };
 
-  handleRequest = (request) => {
+  handleRequest (request) {
     return new Promise((resolve, reject) => {
       request
         .then((res) => {
-          console.log(res)
           const data = res.data
           if (!data) {
             return reject(this.createError(400, 'no data'))
@@ -123,14 +122,13 @@ class Request {
         })
         .catch((err) => {
           const resp = err.response
-          console.log('---------------', resp)
           if (resp.status === 404) {
             reject(this.createError(404, 'need auth')) // 异步操作失败时调用，并将异步操作爆出的错误作为参数传递出去
           }
         })
     })
   };
-  handleAll = (request) => {
+  handleAll (request) {
   // promisory一个promise工厂
     let args = []
     for (let i = 0; i < request.length; i++) {
@@ -188,4 +186,4 @@ class Request {
   }
 }
 
-export default new Request()
+export default new Db()

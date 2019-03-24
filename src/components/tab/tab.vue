@@ -2,9 +2,9 @@
 <template>
   <div class="tab">
     <div class="tab-items" >
-      <router-link tag="div" class="tab-item" to="/home">
+      <router-link tag="div" class="tab-item" to="/recommend">
         <span class="tab-link">
-          <i class="iconw icon-w15"></i>
+          <i class="iconfont icon-homepage"></i>
         </span>
       </router-link>
       <router-link tag="div" class="tab-item" to="/line">
@@ -83,17 +83,14 @@ export default {
             i {
               font-size: 0.3rem;
             }
-            // .icon-homepage:before {
-            //   content: "\E71C";
-            // }
           }
         }
         &.active {
               .tab-link {
                 i {
                   color: @color-day-2;
-                  &.icon-w15:before {
-                    content: "\e617"!important;
+                  &.icon-homepage:before {
+                    content: "\e71c"!important;
                   }
                   &.icon-coordinates:before {
                     content: "\E6F8"!important;

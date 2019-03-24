@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <m-header :title="title"></m-header>
+    <navbar :title="title"></navbar>
     <transition name="transition">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </transition>
-    <tab></tab>
+
     <loading  :show="isLoading" ></loading>
   </div>
 </template>
@@ -14,8 +14,7 @@
 <script type='text/ecmascript-6'>
 import { mapGetters } from 'vuex'
 import Loading from 'base/loading/loading'
-import Tab from 'components/tab/tab'
-import MHeader from 'components/m-header/m-header'
+import Navbar from 'components/navbar/navbar'
 
 export default {
   data () {
@@ -25,8 +24,7 @@ export default {
   },
   components: {
     Loading,
-    Tab,
-    MHeader
+    Navbar
   },
   computed: {
     title () {
@@ -37,7 +35,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   @import 'common/less/transition.less';
 
 </style>

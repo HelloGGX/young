@@ -5,17 +5,18 @@ function resolve (dir) {
 }
 module.exports = {
   lintOnSave: true,
-  productionSourceMap: true,
+  productionSourceMap: undefined,
+
   css: {
     loaderOptions: {
-      // pass options to sass-loader
       less: {
-        // @/ is an alias to src/
-        // so this assumes you have a file named `src/variables.scss`
-        data: `@import "@/common/less/variable.less";`
+        data: '@import "@/common/less/variable.less";'
       }
-    }
+    },
+    sourceMap: true
   },
+
+  // plugins: [ 'vux-ui', 'duplicate-style' ]
   chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('src'))
@@ -29,6 +30,11 @@ module.exports = {
       .set('store', resolve('src/store'))
       .set('router', resolve('src/router'))
       .set('mixins', resolve('src/mixins'))
-  }
-  // plugins: [ 'vux-ui', 'duplicate-style' ]
+  },
+
+  baseUrl: undefined,
+  outputDir: undefined,
+  assetsDir: undefined,
+  runtimeCompiler: undefined,
+  parallel: undefined
 }
