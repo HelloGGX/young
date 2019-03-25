@@ -3,19 +3,21 @@
   <div class="header">
     <div class="header-items">
       <div class="header-item">
-        <img src="../../common/images/ios/icon@2x.png" alt="">
+        <img src="../../common/images/align-left.png" alt="">
       </div>
       <div class="header-item-title">
-        <h3>{{title}}</h3>
+        <search-box></search-box>
       </div>
       <div class="header-item">
-        <img src="../../common/images/ios/icon-search@2x.png" alt="">
+        <img src="../../common/images/user.png" alt="">
       </div>
     </div>
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
+import SearchBox from 'base/search-box/search-box';
+
 export default {
   data () {
     return {
@@ -26,23 +28,31 @@ export default {
       type: String,
       default: 'HOME'
     }
+  },
+  components:{
+    SearchBox
   }
 }
 
 </script>
 <style lang='less' scoped>
+@import '~@/common/less/variable.less';
+
 .header {
-   z-index: 10000!important;
     position: fixed;
     top: 0;
-    width: 3.75rem;
-    background-color:#fff;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background-color:@color-background-d;
     .header-items {
       height: .7rem;
       display: -webkit-box;
       display: -webkit-flex;
       display: flex;
       padding-top: 0.2rem;
+      flex-direction: row;
+      justify-content: space-between;
       .header-item {
         position: relative;
         -webkit-box-flex: 1;
@@ -53,6 +63,7 @@ export default {
         justify-content: center;
         align-items: center;
         img {
+          width: 0.28rem;
           margin: 0 auto;
         }
       }

@@ -6,16 +6,6 @@ function resolve (dir) {
 module.exports = {
   lintOnSave: true,
   productionSourceMap: undefined,
-
-  css: {
-    loaderOptions: {
-      less: {
-        data: '@import "@/common/less/variable.less";'
-      }
-    },
-    sourceMap: true
-  },
-
   // plugins: [ 'vux-ui', 'duplicate-style' ]
   chainWebpack: config => {
     config.resolve.alias
@@ -31,7 +21,14 @@ module.exports = {
       .set('router', resolve('src/router'))
       .set('mixins', resolve('src/mixins'))
   },
-
+  css: {
+    loaderOptions: {
+      less: {
+        data: `@import "@/common/less/variable.less";`
+      }
+    },
+    sourceMap: true
+  },
   baseUrl: undefined,
   outputDir: undefined,
   assetsDir: undefined,

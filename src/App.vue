@@ -1,6 +1,7 @@
 <template>
-  <div id="app">
+  <div>
     <navbar :title="title"></navbar>
+
     <transition name="transition">
       <keep-alive>
         <router-view></router-view>
