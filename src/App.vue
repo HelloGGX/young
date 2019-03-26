@@ -1,14 +1,14 @@
 <template>
   <div>
     <navbar :title="title"></navbar>
-
+    <div></div>
+    <tab></tab>
     <transition name="transition">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </transition>
-
-    <loading  :show="isLoading" ></loading>
+    <loading :show="isLoading"></loading>
   </div>
 </template>
 
@@ -16,6 +16,7 @@
 import { mapGetters } from 'vuex'
 import Loading from 'base/loading/loading'
 import Navbar from 'components/navbar/navbar'
+import Tab from 'components/tab/tab'
 
 export default {
   data () {
@@ -25,7 +26,8 @@ export default {
   },
   components: {
     Loading,
-    Navbar
+    Navbar,
+    Tab
   },
   computed: {
     title () {
@@ -37,6 +39,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  @import 'common/less/transition.less';
-
+@import "~@/common/less/transition.less";
 </style>

@@ -12,8 +12,8 @@ import _ from 'lodash'
 export default {
   data () {
     return {
-      query:''
-    };
+      query: ''
+    }
   },
   props: {
     placeholder: {
@@ -21,14 +21,11 @@ export default {
       default: '搜索歌曲、歌手'
     }
   },
-
-  mounted: {},
-
   methods: {
-    blur() {
+    blur () {
       this.$refs.queryRef.blur()
     },
-    clearQuery(){
+    clearQuery () {
       this.query = ''
     }
   },
@@ -37,7 +34,7 @@ export default {
     this.$watch('query', _.debounce((newQuery) => {
       this.$emit('query', newQuery)
     }, 300))
-  },
+  }
 }
 
 </script>
@@ -65,7 +62,7 @@ export default {
 .search_input {
     width: 100%;
     margin: 0 5px;
-    line-height: 18px;
+    line-height: 2em;
     border: 0;
     outline: none;
     color: @color-text;

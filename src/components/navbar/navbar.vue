@@ -16,7 +16,7 @@
 </template>
 
 <script type='text/ecmascript-6'>
-import SearchBox from 'base/search-box/search-box';
+import SearchBox from 'base/search-box/search-box'
 
 export default {
   data () {
@@ -29,7 +29,7 @@ export default {
       default: 'HOME'
     }
   },
-  components:{
+  components: {
     SearchBox
   }
 }
@@ -39,11 +39,7 @@ export default {
 @import '~@/common/less/variable.less';
 
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
+    position: relative;
     background-color:@color-background-d;
     .header-items {
       height: .7rem;
@@ -63,7 +59,7 @@ export default {
         justify-content: center;
         align-items: center;
         img {
-          width: 0.28rem;
+          width: 0.24rem;
           margin: 0 auto;
         }
       }

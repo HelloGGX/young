@@ -4,7 +4,6 @@ export function hasClass (el, className) {
 }
 
 export function addClass (el, className) {
-  debugger
   if (hasClass(el, className)) {
     return
   }
