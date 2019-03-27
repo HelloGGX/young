@@ -1,7 +1,6 @@
 <template>
   <div>
     <navbar :title="title"></navbar>
-    <div></div>
     <tab></tab>
     <transition name="transition">
       <keep-alive>
