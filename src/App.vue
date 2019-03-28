@@ -1,6 +1,16 @@
 <template>
   <div>
-    <navbar :title="title"></navbar>
+    <navbar :title="title">
+      <template v-slot:left>
+        <img src="./common/images/align-left.png" alt="">
+      </template>
+      <template v-slot:middle>
+        <search-box></search-box>
+      </template>
+      <template v-slot:right>
+        <img src="./common/images/user.png" alt="">
+      </template>
+    </navbar>
     <tab></tab>
     <transition name="transition">
       <keep-alive>
@@ -16,6 +26,7 @@ import { mapGetters } from 'vuex'
 import Loading from 'base/loading/loading'
 import Navbar from 'components/navbar/navbar'
 import Tab from 'components/tab/tab'
+import SearchBox from 'base/search-box/search-box'
 
 export default {
   data () {
@@ -26,7 +37,8 @@ export default {
   components: {
     Loading,
     Navbar,
-    Tab
+    Tab,
+    SearchBox
   },
   computed: {
     title () {

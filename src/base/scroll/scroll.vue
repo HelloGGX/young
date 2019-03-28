@@ -15,7 +15,7 @@
             <span>{{pullUpTxt}}</span>
           </div>
           <div class="after-trigger" v-else>
-            <loading></loading>
+             <i class="loading"></i>
           </div>
         </div>
       </slot>
@@ -32,8 +32,8 @@
           <bubble :y="bubbleY"></bubble>
         </div>
         <div class="after-trigger" v-else>
-          <div v-if="isPullingDown" class="loading">
-            <loading></loading>
+          <div v-if="isPullingDown">
+              <i class="loading"></i>
           </div>
           <div v-else><span>{{refreshTxt}}</span></div>
         </div>
@@ -45,7 +45,6 @@
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
 import Bubble from 'base/bubble/bubble'
-import Loading from 'base/loading/loading'
 import { getRect } from 'common/js/dom'
 
 const COMPONENT_NAME = 'scroll'
@@ -57,9 +56,7 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function () {
-        return []
-      }
+      default: () => []
     },
     probeType: {
       type: Number,
@@ -91,7 +88,7 @@ export default {
     },
     pullDownRefresh: {
       type: null,
-      default: false
+      default: true
     },
     pullUpLoad: {
       type: null,
@@ -128,6 +125,16 @@ export default {
       bubbleY: 0
     }
   },
+  computed: {
+    pullUpTxt () {
+      const moreTxt = (this.pullUpLoad && this.pullUpLoad.txt && this.pullUpLoad.txt.more) || '加载更多'
+      const noMoreTxt = (this.pullUpLoad && this.pullUpLoad.txt && this.pullUpLoad.txt.noMore) || '没有更多数据了'
+      return this.pullUpDirty ? moreTxt : noMoreTxt
+    },
+    refreshTxt () {
+      return (this.pullDownRefresh && this.pullDownRefresh.txt) || '刷新成功'
+    }
+  },
   created () {
     this.pullDownInitTop = -50
   },
@@ -135,6 +142,9 @@ export default {
     setTimeout(() => {
       this._initScroll()
     }, 20)
+  },
+  destroyed () {
+    this.$refs.scroll && this.$refs.scroll.destroy()
   },
   methods: {
     _initScroll () {
@@ -144,8 +154,7 @@ export default {
       if (this.$refs.listWrapper && (this.pullDownRefresh || this.pullUpLoad)) {
         this.$refs.listWrapper.style.minHeight = `${getRect(this.$refs.wrapper).height + 1}px`
       }
-
-      this.scroll = new BScroll(this.$refs.wrapper, {
+      let options = {
         probeType: this.probeType,
         click: this.click,
         scrollbar: this.scrollbar,
@@ -153,7 +162,8 @@ export default {
         pullUpLoad: this.pullUpLoad,
         startY: this.startY,
         bounce: this.bounce
-      })
+      }
+      this.scroll = new BScroll(this.$refs.wrapper, options)
 
       if (this.listenScroll) {
         this.scroll.on('scroll', (pos) => {
@@ -260,19 +270,65 @@ export default {
     }
   },
   watch: {
-    data () {
+    data () { // 数据更新了就做下拉状态完成后的一些操作（隐藏loading）
       setTimeout(() => {
         this.forceUpdate(true)
       }, this.refreshDelay)
     }
   },
   components: {
-    Bubble,
-    Loading
+    Bubble
   }
 }
 </script>
 
 <style lang="less">
+.list-wrapper {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    .scroll-content {
+      position: relative;
+      z-index: 1;
+    }
+    .list-content {
+      position: relative;
+      z-index: 10;
+      .list-item {
+        height: 60px;
+        line-height: 60px;
+        font-size: 18px;
+        padding-left: 20px;
+        border-bottom: 1px solid #e5e5e5;
+      }
+    }
+}
+.loading {
+   width: 2em;
+    height: 2em;
+    margin: 0;
+    display: inline-block;
+    vertical-align: middle;
+    background: transparent url('./loading.gif') no-repeat;
+    background-size: 100%;
+}
+.pulldown-wrapper {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all;
+    .after-trigger {
 
+    }
+}
+.pullup-wrapper {
+  width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px 0;
+}
 </style>

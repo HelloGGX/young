@@ -3,6 +3,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 export default {
   props: {
     y: {
@@ -88,9 +89,9 @@ export default {
         y: headPointR.y + this.distance / 2
       }
       ctx.quadraticCurveTo(controlPointR.x, controlPointR.y, headPointR.x, headPointR.y)
-      ctx.fillStyle = 'rgb(170,170,170)'
+      ctx.fillStyle = '#f96570'
       ctx.fill()
-      ctx.strokeStyle = 'rgb(153,153,153)'
+      ctx.strokeStyle = '#f96570'
       ctx.stroke()
       ctx.restore()
     },
@@ -106,9 +107,9 @@ export default {
       ctx.lineTo(this.headCenter.x, this.headCenter.y - arrowRadius - this.arrowWidth / 2 + rate)
       ctx.lineTo(this.headCenter.x + this.arrowWidth * 2 - rate * 2, this.headCenter.y - arrowRadius + this.arrowWidth / 2)
       ctx.lineTo(this.headCenter.x, this.headCenter.y - arrowRadius + this.arrowWidth * 3 / 2 - rate)
-      ctx.fillStyle = 'rgb(255,255,255)'
+      ctx.fillStyle = '#fff'
       ctx.fill()
-      ctx.strokeStyle = 'rgb(170,170,170)'
+      ctx.strokeStyle = '#f96570'
       ctx.stroke()
       ctx.restore()
     }

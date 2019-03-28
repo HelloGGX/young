@@ -1,6 +1,6 @@
 <template>
   <div class="recommend" ref="recommend">
-    <scroll v-if="songList.length" ref="scroll" :data="songList" class="recommend-content">
+    <scroll v-if="songList.length"  ref="scroll" :data="songList" @pullingDown='onPullingDown' class="recommend-content">
       <div>
         <div v-if="slider.length" class="slider-wrapper" ref="sliderWrapper">
           <slider>
@@ -14,7 +14,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单</h1>
           <ul>
-            <li class="item" v-for="item in songList" :key="item.id">
+            <li class="item" v-for="item in songList" :key="item.id" @click="selectItem(item)">
               <div class="icon">
                 <img width="60" height="60" alt :src="item.picUrl">
               </div>
@@ -41,13 +41,16 @@
         </div>
       </div>
     </scroll>
+     <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import api from 'api/recommend'
+import { RecommendModel } from 'api/recommend'
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
+
+const recommendmodel = new RecommendModel()
 
 export default {
   data () {
@@ -62,11 +65,18 @@ export default {
   },
   methods: {
     _getRecommend () {
-      api.getRecommend().then(res => {
-        console.log(res)
+      recommendmodel.getRecommend().then(res => {
         this.slider = res.data.slider
         this.songList = res.data.songList
         this.radioList = res.data.radioList
+      })
+    },
+    onPullingDown () {
+      this._getRecommend()
+    },
+    selectItem (item) {
+      this.$router.push({
+        path: `/recommend/${item.id}`
       })
     }
   },
@@ -82,8 +92,9 @@ export default {
 
 .recommend {
   position: fixed;
+  max-width: 640px;
   width: 100%;
-  top: 130px;
+  top: 1.3rem;
   bottom: 0;
   .recommend-content {
     padding: 0 0.12rem 0;

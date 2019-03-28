@@ -8,7 +8,11 @@ axios.defaults.timeout = 5000
 
 const request = axios.create()
 // let CancelToken = axios.CancelToken // 取消请求
-
+const tips = {
+  401: '抱歉，你还未登陆',
+  403: '登录过期，请重新登录',
+  404: '网络请求不存在'
+}
 request.interceptors.request.use(
   (config) => {
     // 在请求或响应被 then 或 catch 处理前拦截它们。
@@ -69,7 +73,7 @@ request.interceptors.response.use(
           // 跳转登录页面
         case 403:
 
-          error.message = '登录过期，请重新登录'
+          error.message = tips[error.response.status]
 
           // 清除token
           localStorage.removeItem('token')
@@ -86,7 +90,7 @@ request.interceptors.response.use(
           break
           // 404请求不存在
         case 404:
-          error.message = '网络请求不存在'
+          error.message = tips[error.response.status]
           break
           // 其他错误，直接抛出错误提示
         default:
@@ -103,7 +107,7 @@ request.interceptors.response.use(
   }
 )
 
-class Db {
+class HTTP {
   createError (code, resp) {
     const err = new Error(resp.message)
     err.code = code
@@ -186,4 +190,4 @@ class Db {
   }
 }
 
-export default new Db()
+export { HTTP }

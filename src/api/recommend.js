@@ -1,9 +1,8 @@
-import request from 'utils/request'
-import jsonp from 'common/js/jsonp'
+import { HTTP } from 'utils/request'
+import { jsonp } from 'common/js/jsonp'
 import { commonParams, options, qqcommonParams } from './config'
 
-export default {
-
+class RecommendModel extends HTTP {
   // 推荐页数据
   getRecommend () {
     const url = 'https://c.y.qq.com/musichall/fcgi-bin/fcg_yqqhomepagerecommend.fcg'
@@ -15,7 +14,7 @@ export default {
     })
 
     return jsonp(url, data, options)
-  },
+  }
   // 歌单详情数据
   getSongList (opt) {
     let emptyObj = Object.create(null)
@@ -24,6 +23,7 @@ export default {
       type: 'songlist',
       id: opt.id
     })
-    return request.get(url, data)
+    return this.get(url, data)
   }
 }
+export { RecommendModel }
