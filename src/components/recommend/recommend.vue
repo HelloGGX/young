@@ -1,6 +1,6 @@
 <template>
-  <div class="recommend" ref="recommend">
-    <scroll v-if="songList.length"  ref="scroll" :data="songList" @pullingDown='onPullingDown' class="recommend-content">
+  <div class="recommend page" ref="recommend">
+    <scroll v-if="songList.length"  ref="scroll" :data="songList" :pullDownRefresh="pullDownRefresh" @pullingDown='onPullingDown' class="recommend-content">
       <div>
         <div v-if="slider.length" class="slider-wrapper" ref="sliderWrapper">
           <slider>
@@ -16,7 +16,7 @@
           <ul>
             <li class="item" v-for="item in songList" :key="item.id" @click="selectItem(item)">
               <div class="icon">
-                <img width="60" height="60" alt :src="item.picUrl">
+                <img width="60" height="60" alt v-lazy="item.picUrl">
               </div>
               <div class="text">
                 <h2 class="name">{{item.songListAuthor }}</h2>
@@ -30,7 +30,7 @@
           <ul>
             <li class="item" v-for="item in radioList" :key="item.radioid">
               <div class="icon">
-                <img width="60" height="60" alt :src="item.picUrl">
+                <img width="60" height="60" alt v-lazy="item.picUrl">
               </div>
               <div class="text">
                 <h2 class="name">{{item.Ftitle }}</h2>
@@ -41,7 +41,9 @@
         </div>
       </div>
     </scroll>
-     <router-view></router-view>
+    <transition name="fade">
+       <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -49,7 +51,7 @@
 import { RecommendModel } from 'api/recommend'
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
-
+import { mapMutations } from 'vuex'
 const recommendmodel = new RecommendModel()
 
 export default {
@@ -57,7 +59,8 @@ export default {
     return {
       slider: () => [],
       songList: () => [],
-      radioList: () => []
+      radioList: () => [],
+      pullDownRefresh: true
     }
   },
   created () {
@@ -78,7 +81,11 @@ export default {
       this.$router.push({
         path: `/recommend/${item.id}`
       })
-    }
+      this.set_musicList(item)
+    },
+    ...mapMutations({
+      set_musicList: 'SET_MUSICLIST'
+    })
   },
   components: {
     Slider,
@@ -91,15 +98,14 @@ export default {
 @import "~@/common/less/variable.less";
 
 .recommend {
-  position: fixed;
   max-width: 640px;
   width: 100%;
   top: 1.3rem;
-  bottom: 0;
   .recommend-content {
     padding: 0 0.12rem 0;
     height: 100%;
     overflow: hidden;
+    position: relative;
     .recommend-list {
       ul {
         display: flex;

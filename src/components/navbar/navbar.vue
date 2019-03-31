@@ -43,11 +43,15 @@ export default {
 
 </script>
 <style lang='less' scoped>
+
 @import '~@/common/less/variable.less';
 
 .header {
-    position: relative;
-    background-color:@color-background-d;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
     font-size: 0.18rem;
     .header-items {
       height: .7rem;
@@ -79,7 +83,7 @@ export default {
         -webkit-box-flex: 4;
         -ms-flex: 4;
         flex: 4;
-        text-align: left;
+        text-align: center;
         h3 {
           color: #fff;
           line-height: 0.5rem;

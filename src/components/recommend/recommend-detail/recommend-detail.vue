@@ -1,47 +1,44 @@
 <!-- 歌单推荐详情页 -->
 <template>
-  <transition name="fade">
-    <div class="recommend-detail page">
-      <navbar :title="title">
-      </navbar>
-      <scroll>
 
-      </scroll>
+    <div class="recommend-detail">
+        <music-list :songs=songs :title="title"></music-list>
     </div>
-  </transition>
+
 </template>
 
 <script  type='text/ecmascript-6'>
-import Scroll from 'base/scroll/scroll'
-import Navbar from 'components/navbar/navbar'
+import MusicList from 'components/music-list/music-list'
 import { RecommendModel } from 'api/recommend'
 
 const recommendmode = new RecommendModel()
 export default {
   data () {
     return {
+      songs: [],
       title: '歌单'
     }
-  },
-  created () {
-    this._getRecommendDetail(this.$route.params.id)
   },
   methods: {
     _getRecommendDetail (id) {
       recommendmode.getSongList({ id: id }).then(res => {
-        console.log(res)
+        console.log(res.Body)
+        if (res.Code === 'OK') {
+          this.songs = res.Body
+        }
       })
     }
   },
+
+  created () {
+    this._getRecommendDetail(this.$route.params.id)
+  },
   components: {
-    Scroll,
-    Navbar
+    MusicList
   }
 }
 
 </script>
 <style lang='less' scoped>
-.recommend-detail {
 
-}
 </style>

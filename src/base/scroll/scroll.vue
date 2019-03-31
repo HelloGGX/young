@@ -88,7 +88,7 @@ export default {
     },
     pullDownRefresh: {
       type: null,
-      default: true
+      default: false
     },
     pullUpLoad: {
       type: null,
@@ -284,9 +284,9 @@ export default {
 
 <style lang="less">
 .list-wrapper {
-    position: relative;
-    height: 100%;
-    overflow: hidden;
+    // position: relative;
+    // height: 100%;
+    // overflow: hidden;
     .scroll-content {
       position: relative;
       z-index: 1;

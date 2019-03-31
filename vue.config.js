@@ -29,7 +29,8 @@ module.exports = {
     },
     sourceMap: true
   },
-  baseUrl: undefined,
+
+  // baseUrl: undefined,
   outputDir: undefined,
   assetsDir: undefined,
   runtimeCompiler: undefined,

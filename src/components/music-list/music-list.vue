@@ -1,24 +1,214 @@
-<!-- 歌单列表 -->
+<!-- 歌单推荐详情页 -->
 <template>
-  <div>歌单列表</div>
+  <div class="music-list page">
+    <navbar :title="title"></navbar>
+    <div class="music-list_bg" :style="bgStyle" ref="bgImage">
+      <div class="music-list_cover">
+        <img src="@/common/images/music-list_bg@2x.png" alt="">
+      </div>
+      <div class="music-list_inner">
+        <img class="music-list_img" :src="musicList.picUrl" alt="">
+        <div class="music-list_info">
+          <h3>{{musicList.songListAuthor}}</h3>
+          <p>{{musicList.songListDesc}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="music-list_do" ref="do">
+      <ul>
+        <li>
+          <img src="@/common/images/BigStar@2x.png" alt="">
+          <p>232</p>
+        </li>
+        <li>
+          <img src="@/common/images/Speechbubblefreeicon@2x.png" alt="">
+          <p>232</p>
+        </li>
+        <li>
+          <img src="@/common/images/Cloudcomputing@2x.png" alt="">
+          <p>232</p>
+        </li>
+        <li>
+          <img src="@/common/images/Group@2x.png" alt="">
+          <p>232</p>
+        </li>
+      </ul>
+    </div>
+    <div class="bg-layer" ref="layer"></div>
+    <scroll class="scroll" ref="list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+      <div>
+        <song-list :songs="songs" @select="selectItem"></song-list>
+      </div>
+    </scroll>
+  </div>
 </template>
 
 <script  type='text/ecmascript-6'>
+import Scroll from 'base/scroll/scroll'
+import Navbar from 'components/navbar/navbar'
+import SongList from 'base/song-list/song-list'
+import { prefixStyle } from 'common/js/dom'
+import { mapGetters, mapActions } from 'vuex'
+
+const RESERVED_HEIGHT = 60
+const transform = prefixStyle('transform')
+
 export default {
-  data () {
-    return {
+  props: {
+    songs: {
+      type: Array,
+      default: () => []
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
+  data () {
+    return {
+      scrollY: 0
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'musicList'
+    ]),
+    bgStyle () {
+      return `background-image:url(${this.musicList.picUrl})`
+    }
+  },
+  mounted () {
+    this.imageHeight = this.$refs.bgImage.clientHeight + this.$refs.do.clientHeight
+    this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
+    this.$refs.list.$el.style['top'] = `${this.imageHeight}px`
+  },
+  created () {
+    this.probeType = 3
+    this.listenScroll = true
+  },
+  methods: {
+    scroll (pos) {
+      this.scrollY = pos.y
+    },
+    selectItem (item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
+  },
+  watch: {
+    scrollY (newVal) {
+      let translateY = Math.max(this.minTransalteY, newVal) // layer移动的最大高度不能超过minTransalteY
+      let scale = 1
+      let zIndex = 0
 
-  components: {},
+      const percent = Math.abs(newVal / this.imageHeight)
 
-  computed: {},
-
-  mounted: {},
-
-  methods: {}
+      if (newVal > 0) {
+        scale = 1 + percent
+      }
+      this.$refs.layer.style['transform'] = `translate3d(0,${translateY}px,0)`
+      if (newVal < this.minTransalteY) {
+        this.$refs.bgImage.style.paddingTop = 0
+        this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
+        this.$refs.bgImage.style.overflow = 'hidden'
+        // this.$refs.playBtn.style.display = 'none'
+      } else {
+        this.$refs.bgImage.style.paddingTop = '46%'
+        this.$refs.bgImage.style.height = 0
+        this.$refs.bgImage.style.overflow = 'initial'
+        // this.$refs.playBtn.style.display = ''
+      }
+      this.$refs.bgImage.style[transform] = `scale(${scale})`
+      this.$refs.bgImage.style.zIndex = zIndex
+    }
+  },
+  components: {
+    Scroll,
+    Navbar,
+    SongList
+  }
 }
-
 </script>
 <style lang='less' scoped>
+@import "~@/common/less/variable.less";
+.music-list {
+  &_cover {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    top: 0;
+    img {
+      height: 108%;
+    }
+  }
+  &_bg {
+    position: relative;
+    height: 0;
+    padding-top: 46%;
+    transform-origin: top;
+    background-size: cover;
+  }
+  &_do {
+    padding: 0.2rem 0.1rem;
+    margin-top: 0.1rem;
+    ul {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 1px solid @color-text-d;
+      li {
+        margin-bottom: 0.1rem;
+        img {
+          width: 0.26rem;
+          height: 0.24rem;
+        }
+        p {
+          text-align: center;
+          line-height: 0.28rem;
+        }
+      }
+    }
+  }
+  &_inner {
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.14rem 0.4rem;
+  }
+  &_img {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  &_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 0.2rem;
+    line-height: 0.2rem;
+    font-weight: 200;
+    h3 {
+      font-size: 0.14rem;
+      line-height: 0.3rem;
+    }
+    p {
+      font-size: 0.12rem;
+    }
+  }
+}
+.bg-layer {
+  position: relative;
+  height: 100%;
+  background: @color-background-d;
+}
 </style>

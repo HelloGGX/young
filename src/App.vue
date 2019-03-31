@@ -11,12 +11,13 @@
         <img src="./common/images/user.png" alt="">
       </template>
     </navbar>
-    <tab></tab>
+    <tab class="app_tab"></tab>
     <transition name="transition">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </transition>
+    <player></player>
     <loading :show="isLoading"></loading>
   </div>
 </template>
@@ -27,6 +28,7 @@ import Loading from 'base/loading/loading'
 import Navbar from 'components/navbar/navbar'
 import Tab from 'components/tab/tab'
 import SearchBox from 'base/search-box/search-box'
+import Player from 'components/player/player'
 
 export default {
   data () {
@@ -38,7 +40,8 @@ export default {
     Loading,
     Navbar,
     Tab,
-    SearchBox
+    SearchBox,
+    Player
   },
   computed: {
     title () {
@@ -50,5 +53,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-@import "~@/common/less/transition.less";
+.app_tab {
+   margin-top: 0.7rem;
+}
 </style>
