@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     back () {
-      this.$router.back()
+      this.$emit('back')
     }
   }
 }
@@ -47,11 +47,6 @@ export default {
 @import '~@/common/less/variable.less';
 
 .header {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 1;
     font-size: 0.18rem;
     .header-items {
       height: .7rem;

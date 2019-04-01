@@ -1,7 +1,7 @@
 <!-- 歌单推荐详情页 -->
 <template>
   <div class="music-list page">
-    <navbar :title="title"></navbar>
+    <navbar :title="title" class="music-list_navbar" @back="back"></navbar>
     <div class="music-list_bg" :style="bgStyle" ref="bgImage">
       <div class="music-list_cover">
         <img src="@/common/images/music-list_bg@2x.png" alt="">
@@ -87,6 +87,11 @@ export default {
     this.listenScroll = true
   },
   methods: {
+    back () {
+      window.history.length > 1
+        ? this.$router.go(-1)
+        : this.$router.push('/')
+    },
     scroll (pos) {
       this.scrollY = pos.y
     },
@@ -136,6 +141,13 @@ export default {
 </script>
 <style lang='less' scoped>
 @import "~@/common/less/variable.less";
+.music-list_navbar {
+  position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
 .music-list {
   &_cover {
     position: absolute;
@@ -181,13 +193,13 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0.14rem 0.4rem;
+    padding: 0.14rem 0.2rem;
   }
   &_img {
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
     overflow: hidden;
+    border-radius: 6%;
   }
   &_info {
     display: flex;

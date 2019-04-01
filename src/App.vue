@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <navbar :title="title">
+  <div class="app">
+    <navbar :title="title" class="app_navbar">
       <template v-slot:left>
         <img src="./common/images/align-left.png" alt="">
       </template>
@@ -53,6 +53,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.app_navbar {
+   position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    margin: auto;
+    max-width: 640px;
+}
 .app_tab {
    margin-top: 0.7rem;
 }
