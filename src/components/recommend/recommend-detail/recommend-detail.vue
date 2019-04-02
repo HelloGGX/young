@@ -22,7 +22,6 @@ export default {
   methods: {
     _getRecommendDetail (id) {
       recommendmode.getSongList({ id: id }).then(res => {
-        console.log(res.Body)
         if (res.Code === 'OK') {
           this.songs = res.Body
         }

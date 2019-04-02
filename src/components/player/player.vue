@@ -22,10 +22,7 @@
           <div class="middle-r" ref="lyricList"></div>
         </div>
         <div class="bottom">
-          <div class="dot-wrapper">
-            <span class="dot" :class="{'active':currentShow==='cd'}"></span>
-            <span class="dot" :class="{'active':currentShow==='lyric'}"></span>
-          </div>
+
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -37,18 +34,18 @@
             <div class="icon" @click="changeMode">
               <i class="iconfont" :class="iconMode"></i>
             </div>
-            <div class="icon">
+            <div class="icon" @click="prev">
               <i class="iconfont i-zuobofang"></i>
             </div>
             <div class="icon">
               <div class="operators_playbtn" @click="togglePlaying">
-                <i class="iconfont" :class="playIcon" ></i>
+                <i class="iconfont" :class="playIcon"></i>
               </div>
             </div>
-            <div class="icon ">
+            <div class="icon" @click="next">
               <i class="iconfont i-youbofang"></i>
             </div>
-            <div class="icon ">
+            <div class="icon">
               <i class="iconfont i-shoucang1"></i>
             </div>
           </div>
@@ -58,21 +55,14 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen"></div>
     </transition>
-    <audio
-      ref="audio"
-      :src="currentSong.url"
-      @play="ready"
-      @error="error"
-      @timeupdate="updateTime"
-      @ended="end"
-    ></audio>
+    <audio ref="audio" :src="currentSong.url" @canplay="canpaly"  @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
   </div>
 </template>
 
 <script  type='text/ecmascript-6'>
 import Navbar from 'components/navbar/navbar'
 import { SongModel } from 'api/song'
-import { shuffle } from 'common/js/utils'
+import { shuffle } from 'lodash'
 import { playMode } from 'common/js/config'
 import { mapGetters, mapMutations } from 'vuex'
 import ProgressBar from 'base/progress-bar/progress-bar'
@@ -96,7 +86,11 @@ export default {
       return this.playing ? 'i-zanting' : 'i-bofang'
     },
     iconMode () {
-      return this.mode === playMode.sequence ? 'i-yuanxunhuanbofang' : this.mode === playMode.loop ? 'i-danquxunhuan' : 'i-suijibofang'
+      return this.mode === playMode.sequence
+        ? 'i-yuanxunhuanbofang'
+        : this.mode === playMode.loop
+          ? 'i-danquxunhuan'
+          : 'i-suijibofang'
     },
     percent () {
       return this.currentTime / this.currentSong.duration
@@ -126,9 +120,9 @@ export default {
         this.currentLyric.togglePlay()
       }
     },
-
     changeMode () {
       const mode = (this.mode + 1) % 3
+
       this.setPlayMode(mode)
       let list = null
       if (mode === playMode.random) {
@@ -140,8 +134,8 @@ export default {
       this.setPlaylist(list)
     },
     resetCurrentIndex (list) {
-      let index = list.findIndex((item) => {
-        return item.id === this.currentSong.id
+      let index = list.findIndex(item => {
+        return item.mid === this.currentSong.mid
       })
       this.setCurrentIndex(index)
     },
@@ -158,25 +152,20 @@ export default {
         this.currentLyric.seek(currentTime * 1000)
       }
     },
-    getLyric (url) {
-      songModel
-        .getLyric({ id: this.currentSong.mid })
-        .then(lyric => {
-          if (this.currentSong.lyric !== lyric) {
-          }
-
-          this.currentLyric = new Lyric(lyric, this.handleLyric)
-          const totalTime = this.$refs.audio.duration
-          this.currentSong.duration = totalTime
-          if (this.playing) {
-            this.currentLyric.play()
-          }
-        })
-        .catch(() => {
-          this.currentLyric = null
-          this.playingLyric = ''
-          this.currentLineNum = 0
-        })
+    getLyric () {
+      songModel.getLyric({ id: this.currentSong.mid }).then((lyric) => {
+        if (this.currentSong.lyric !== lyric) {
+          return
+        }
+        this.currentLyric = new Lyric(lyric, this.handleLyric)
+        if (this.playing) {
+          this.currentLyric.play()
+        }
+      }).catch(() => {
+        this.currentLyric = null
+        this.playingLyric = ''
+        this.currentLineNum = 0
+      })
     },
     handleLyric ({ lineNum, txt }) {
       this.currentLineNum = lineNum
@@ -190,7 +179,12 @@ export default {
       // } else {
       //   this.$refs.lyricList.scrollTo(0, 0, 1000)
       // }
+      console.log(txt)
       this.playingLyric = txt
+    },
+    canpaly () {
+      const totalTime = this.$refs.audio.duration
+      this.currentSong.duration = totalTime
     },
     ready () {
       this.songReady = true
@@ -206,6 +200,40 @@ export default {
         this.loop()
       } else {
         this.next()
+      }
+    },
+    next () {
+      if (!this.songReady) {
+        return
+      }
+      if (this.playlist.length === 1) { // 如果列表只有一首歌
+        this.loop()
+      } else {
+        let index = this.currentIndex + 1
+        if (index === this.playlist.length) { // 如果已经到了最后一首歌
+          index = 0
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying()
+        }
+      }
+    },
+    prev () {
+      if (!this.songReady) {
+        return
+      }
+      if (this.playlist.length === 1) { // 如果列表只有一首歌
+        this.loop()
+      } else {
+        let index = this.currentIndex - 1
+        if (index === -1) { // 如果第一首歌
+          index = this.playlist.length - 1
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying()
+        }
       }
     },
     loop () {
@@ -239,6 +267,9 @@ export default {
     },
     back () {
       this.setFullscreen(false)
+    },
+    open () {
+      this.setFullScreen(true)
     }
   },
   watch: {
@@ -249,6 +280,10 @@ export default {
       if (newSong.mid === oldSong.mid) {
         return
       }
+      if (isNaN(this.$refs.audio.duration)) {
+        return
+      }
+
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.$refs.audio.play()

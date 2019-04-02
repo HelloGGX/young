@@ -1,10 +1,10 @@
 import types from './mutation-types'
 import { playMode } from 'common/js/config'
-import { shuffle } from 'common/js/utils'
+import { shuffle } from 'lodash'
 
 function findIndex (list, song) {
   return list.findIndex((item) => {
-    return item.id === song.id
+    return item.mid === song.mid
   })
 }
 const actions = {
