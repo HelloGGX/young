@@ -15,7 +15,6 @@
               </div>
             </div>
             <div class="playing-lyric-wrapper">
-              <div class="playing-lyric">{{oldPlayingLyric}}</div>
               <div class="playing-lyric playing-lyric__now">{{playingLyric}}</div>
             </div>
           </div>
@@ -76,7 +75,6 @@ export default {
       songReady: false,
       currentTime: 0,
       playingLyric: '',
-      oldPlayingLyric: '',
       currentLineNum: 0,
       currentShow: 'cd'
     }
@@ -116,6 +114,7 @@ export default {
         return
       }
       this.setPlayingState(!this.playing)
+
       if (this.currentLyric) {
         this.currentLyric.togglePlay()
       }
@@ -154,10 +153,12 @@ export default {
     },
     getLyric () {
       songModel.getLyric({ id: this.currentSong.mid }).then((lyric) => {
-        if (this.currentSong.lyric !== lyric) {
-          return
-        }
+        // if (this.currentSong.lrc !== lyric) {
+        //   return
+        // }
+
         this.currentLyric = new Lyric(lyric, this.handleLyric)
+
         if (this.playing) {
           this.currentLyric.play()
         }
@@ -169,17 +170,12 @@ export default {
     },
     handleLyric ({ lineNum, txt }) {
       this.currentLineNum = lineNum
-      if (lineNum > 1) {
-        this.oldPlayingLyric = this.currentLyric.lines[lineNum - 1].txt
-      }
-
       // if (lineNum > 5) {
       //   let lineEl = this.$refs.lyricLine[lineNum - 5]
       //   this.$refs.lyricList.scrollToElement(lineEl, 1000)
       // } else {
       //   this.$refs.lyricList.scrollTo(0, 0, 1000)
       // }
-      console.log(txt)
       this.playingLyric = txt
     },
     canpaly () {
@@ -278,9 +274,6 @@ export default {
         return
       }
       if (newSong.mid === oldSong.mid) {
-        return
-      }
-      if (isNaN(this.$refs.audio.duration)) {
         return
       }
 
