@@ -12,6 +12,7 @@
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdCls">
                 <img class="image" :src="currentSong.pic">
+
               </div>
             </div>
             <div class="playing-lyric-wrapper">
@@ -21,7 +22,6 @@
           <div class="middle-r" ref="lyricList"></div>
         </div>
         <div class="bottom">
-
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -64,6 +64,7 @@ import { SongModel } from 'api/song'
 import { shuffle } from 'lodash'
 import { playMode } from 'common/js/config'
 import { mapGetters, mapMutations } from 'vuex'
+import { Wave } from 'common/js/wave'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import Lyric from 'lyric-parser'
 
@@ -76,7 +77,8 @@ export default {
       currentTime: 0,
       playingLyric: '',
       currentLineNum: 0,
-      currentShow: 'cd'
+      currentShow: 'cd',
+      noise: 0.56
     }
   },
   computed: {
@@ -178,12 +180,22 @@ export default {
       // }
       this.playingLyric = txt
     },
-    canpaly () {
+    canpaly () { // 解决audio获取到播放地址后，能获取duration的问题
       const totalTime = this.$refs.audio.duration
       this.currentSong.duration = totalTime
     },
     ready () {
+      const SW = new Wave({
+        width: 300,
+        height: 300,
+        container: this.$refs.middleL
+      })
+      SW.setSpeed(0.4)
+      SW.start()
       this.songReady = true
+      setInterval(() => {
+        SW.setNoise(this.noise)
+      }, 0)
     },
     error () {
       this.songReady = true
@@ -296,7 +308,7 @@ export default {
   }
 }
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 @import "~@/common/less/variable.less";
 .player {
   .normal-player {
@@ -376,7 +388,7 @@ export default {
     }
     .bottom {
       position: absolute;
-      top: 4.8rem;
+      bottom: 0;
       width: 100%;
       .dot-wrapper {
         text-align: center;
@@ -455,5 +467,12 @@ export default {
       transform: rotate(360deg);
     }
   }
+}
+.wave {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+  top: 0;
 }
 </style>
