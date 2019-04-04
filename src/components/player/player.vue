@@ -7,21 +7,53 @@
         <div class="normal-player_bg">
           <img width="100%" height="100%" :src="currentSong.pic">
         </div>
-        <div class="normal-player_middle">
-          <div class="middle-l" ref="middleL">
+        <div class="normal-player_middle" @click="toggleMode">
+          <transition name="fade">
+          <div class="middle-l" ref="middleL" v-show="!lyricMode">
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdCls">
                 <img class="image" :src="currentSong.pic">
-
               </div>
             </div>
             <div class="playing-lyric-wrapper">
-              <div class="playing-lyric playing-lyric__now">{{playingLyric}}</div>
+              <div class="playing-lyric playing-lyric__now" v-if="currentLyric && currentLyric.lines.length>0">{{playingLyric}}</div>
+              <div class="playing-lyric playing-lyric__now" v-else>轻音乐,暂无歌词</div>
             </div>
           </div>
-          <div class="middle-r" ref="lyricList"></div>
+          </transition>
+
+          <scroll
+            class="middle-r"
+            v-show="lyricMode"
+            ref="lyricList"
+            :data="currentLyric && currentLyric.lines"
+          >
+            <div class="lyric-wrapper">
+              <div v-if="currentLyric && currentLyric.lines.length>0">
+                <p
+                  ref="lyricLine"
+                  class="text"
+                  :class="{'current': currentLineNum ===index }"
+                  v-for="(line,index) in currentLyric.lines"
+                  :key="index"
+                >{{line.txt}}</p>
+              </div>
+              <div v-else class="lyric-wrapper_nolyric">
+                <p class="text">轻音乐暂无歌词</p>
+              </div>
+            </div>
+          </scroll>
+
         </div>
         <div class="bottom">
+          <div class="operators operators__top" v-show="!lyricMode">
+             <div class="icon">
+              <i class="iconfont i-shoucang1"></i>
+             </div>
+             <div class="icon">
+               <a :href="currentSong.url"><i class="iconfont i-xiazai"></i></a>
+             </div>
+          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -29,7 +61,7 @@
             </div>
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
-          <div class="operators">
+          <div class="operators operators__bottom">
             <div class="icon" @click="changeMode">
               <i class="iconfont" :class="iconMode"></i>
             </div>
@@ -45,7 +77,7 @@
               <i class="iconfont i-youbofang"></i>
             </div>
             <div class="icon">
-              <i class="iconfont i-shoucang1"></i>
+              <i class="iconfont i-menu-fold"></i>
             </div>
           </div>
         </div>
@@ -54,7 +86,15 @@
     <transition name="mini">
       <div class="mini-player" v-show="!fullScreen"></div>
     </transition>
-    <audio ref="audio" :src="currentSong.url" @canplay="canpaly"  @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
+    <audio
+      ref="audio"
+      :src="currentSong.url"
+      @canplay="canpaly"
+      @play="ready"
+      @error="error"
+      @timeupdate="updateTime"
+      @ended="end"
+    ></audio>
   </div>
 </template>
 
@@ -62,9 +102,9 @@
 import Navbar from 'components/navbar/navbar'
 import { SongModel } from 'api/song'
 import { shuffle } from 'lodash'
+import Scroll from 'base/scroll/scroll'
 import { playMode } from 'common/js/config'
 import { mapGetters, mapMutations } from 'vuex'
-import { Wave } from 'common/js/wave'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import Lyric from 'lyric-parser'
 
@@ -78,7 +118,8 @@ export default {
       playingLyric: '',
       currentLineNum: 0,
       currentShow: 'cd',
-      noise: 0.56
+      lyricMode: false,
+      currentLyric: null
     }
   },
   computed: {
@@ -109,8 +150,10 @@ export default {
       'playing'
     ])
   },
-
   methods: {
+    toggleMode () {
+      this.lyricMode = !this.lyricMode
+    },
     togglePlaying () {
       if (!this.songReady) {
         return
@@ -154,48 +197,38 @@ export default {
       }
     },
     getLyric () {
-      songModel.getLyric({ id: this.currentSong.mid }).then((lyric) => {
-        // if (this.currentSong.lrc !== lyric) {
-        //   return
-        // }
-
-        this.currentLyric = new Lyric(lyric, this.handleLyric)
-
-        if (this.playing) {
-          this.currentLyric.play()
-        }
-      }).catch(() => {
-        this.currentLyric = null
-        this.playingLyric = ''
-        this.currentLineNum = 0
-      })
+      songModel
+        .getLyric({ id: this.currentSong.mid })
+        .then(lyric => {
+          this.currentLyric = new Lyric(lyric, this.handleLyric)
+          if (this.playing) {
+            this.currentLyric.play()
+          }
+        })
+        .catch(() => {
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
+        })
     },
     handleLyric ({ lineNum, txt }) {
       this.currentLineNum = lineNum
-      // if (lineNum > 5) {
-      //   let lineEl = this.$refs.lyricLine[lineNum - 5]
-      //   this.$refs.lyricList.scrollToElement(lineEl, 1000)
-      // } else {
-      //   this.$refs.lyricList.scrollTo(0, 0, 1000)
-      // }
+      // console.log(this.$refs.lyricLine)
+      if (lineNum > 5) {
+        let lineEl = this.$refs.lyricLine[lineNum - 5]
+        this.$refs.lyricList.scrollToElement(lineEl, 1000)
+      } else {
+        this.$refs.lyricList.scrollTo(0, 0, 1000)
+      }
       this.playingLyric = txt
     },
-    canpaly () { // 解决audio获取到播放地址后，能获取duration的问题
+    canpaly () {
+      // 解决audio获取到播放地址后，能获取duration的问题
       const totalTime = this.$refs.audio.duration
       this.currentSong.duration = totalTime
     },
     ready () {
-      const SW = new Wave({
-        width: 300,
-        height: 300,
-        container: this.$refs.middleL
-      })
-      SW.setSpeed(0.4)
-      SW.start()
       this.songReady = true
-      setInterval(() => {
-        SW.setNoise(this.noise)
-      }, 0)
     },
     error () {
       this.songReady = true
@@ -214,11 +247,13 @@ export default {
       if (!this.songReady) {
         return
       }
-      if (this.playlist.length === 1) { // 如果列表只有一首歌
+      if (this.playlist.length === 1) {
+        // 如果列表只有一首歌
         this.loop()
       } else {
         let index = this.currentIndex + 1
-        if (index === this.playlist.length) { // 如果已经到了最后一首歌
+        if (index === this.playlist.length) {
+          // 如果已经到了最后一首歌
           index = 0
         }
         this.setCurrentIndex(index)
@@ -231,11 +266,13 @@ export default {
       if (!this.songReady) {
         return
       }
-      if (this.playlist.length === 1) { // 如果列表只有一首歌
+      if (this.playlist.length === 1) {
+        // 如果列表只有一首歌
         this.loop()
       } else {
         let index = this.currentIndex - 1
-        if (index === -1) { // 如果第一首歌
+        if (index === -1) {
+          // 如果第一首歌
           index = this.playlist.length - 1
         }
         this.setCurrentIndex(index)
@@ -304,7 +341,8 @@ export default {
   },
   components: {
     Navbar,
-    ProgressBar
+    ProgressBar,
+    Scroll
   }
 }
 </script>
@@ -326,9 +364,11 @@ export default {
       }
     }
     &_middle {
-      position: absolute;
+      position: fixed;
       width: 100%;
       top: 0.8rem;
+      bottom: 0;
+      left: 0;
       white-space: nowrap;
       font-size: 0;
       .middle-l {
@@ -340,10 +380,12 @@ export default {
         padding-top: 80%;
         .cd-wrapper {
           position: absolute;
-          left: 10%;
+          left: 0;
+          right: 0;
+          margin: auto;
           top: 0;
-          width: 80%;
-          height: 100%;
+          width: 3rem;
+          height: 3rem;
           .cd {
             width: 100%;
             height: 100%;
@@ -382,8 +424,25 @@ export default {
         display: inline-block;
         vertical-align: top;
         width: 100%;
-        height: 100%;
+        height: 4.4rem;
         overflow: hidden;
+        .lyric-wrapper {
+          width: 80%;
+          margin: 0 auto;
+          overflow: hidden;
+          text-align: center;
+          .text {
+            line-height: 32px;
+            color: @color-text-l;
+            font-size: @font-size-medium;
+            &.current {
+              color: @color-text;
+            }
+          }
+          &_nolyric {
+            margin-top: 50%;
+          }
+        }
       }
     }
     .bottom {
@@ -431,31 +490,37 @@ export default {
           flex: 1;
         }
       }
-      .operators {
-        display: flex;
-        align-items: center;
-        height: 0.88rem;
-        &_playbtn {
-          width: 0.6rem;
-          height: 0.6rem;
-          background-color: #db219d;
-          border-radius: 50%;
-          margin: 0 auto;
-          i {
-            line-height: 0.6rem;
-          }
+    }
+    .operators {
+      display: flex;
+      align-items: center;
+      height: 0.88rem;
+      &_playbtn {
+        width: 0.6rem;
+        height: 0.6rem;
+        background-color: #db219d;
+        border-radius: 50%;
+        margin: 0 auto;
+        i {
+          line-height: 0.6rem;
         }
-        .icon {
-          flex: 1;
+      }
+      .icon {
+        flex: 1;
+        color: #fff;
+        text-align: center;
+        > a {
           color: #fff;
-          text-align: center;
-          &.disable {
-            color: @color-subtheme;
-          }
-          i {
-            font-size: 0.24rem;
-          }
         }
+        &.disable {
+          color: @color-subtheme;
+        }
+        i {
+          font-size: 0.24rem;
+        }
+      }
+      &__top {
+        height: 0.4rem;
       }
     }
   }
