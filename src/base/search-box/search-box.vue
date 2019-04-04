@@ -1,8 +1,8 @@
 <!-- 搜索框组件 -->
 <template>
-  <div class="search">
+  <div class="search" @click="toSearch">
     <i class="search_icon icon-search"></i>
-    <input type="text" class="search_input" ref="queryRef" v-model="query" :placeholder="placeholder">
+    <input type="text" class="search_input" ref="queryRef" v-model="query" :disabled="disabled" :placeholder="placeholder">
     <i class="search_clear  icon-dismiss" v-show="query" @click="clearQuery"></i>
   </div>
 </template>
@@ -19,9 +19,16 @@ export default {
     placeholder: {
       type: String,
       default: '搜索歌曲、歌手'
+    },
+    disabled: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
+    toSearch () {
+      this.$emit('toSearch')
+    },
     blur () {
       this.$refs.queryRef.blur()
     },

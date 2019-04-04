@@ -5,14 +5,14 @@
         <img src="./common/images/align-left.png" alt="">
       </template>
       <template v-slot:middle>
-        <search-box></search-box>
+        <search-box @toSearch="toSearch"></search-box>
       </template>
       <template v-slot:right>
         <img src="./common/images/user.png" alt="">
       </template>
     </navbar>
     <tab class="app_tab"></tab>
-    <transition name="transition">
+    <transition name="fade">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -34,6 +34,13 @@ export default {
   data () {
     return {
       transition: 'fade'
+    }
+  },
+  methods: {
+    toSearch () {
+      this.$router.push({
+        path: `/search/`
+      })
     }
   },
   components: {
