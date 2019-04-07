@@ -1,5 +1,6 @@
 import { HTTP } from 'utils/request'
-import { commonParams } from './config'
+import jsonp from 'common/js/jsonp'
+import { commonParams, options } from './config'
 
 class SongModel extends HTTP {
   getLyric (opt) {
@@ -18,7 +19,7 @@ class SongModel extends HTTP {
       type: 'url',
       id: opt.id
     })
-    return this.get(url, data)
+    return jsonp(url, data, options)
   }
 }
 export { SongModel }

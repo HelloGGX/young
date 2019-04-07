@@ -24,6 +24,7 @@ export default {
       recommendmode.getSongList({ id: id }).then(res => {
         if (res.Code === 'OK') {
           this.songs = res.Body
+          this.title = res.listname
         }
       })
     }

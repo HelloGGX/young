@@ -79,6 +79,7 @@ export default {
         -ms-flex: 4;
         flex: 4;
         text-align: center;
+        overflow: hidden;
         h3 {
           color: #fff;
           line-height: 0.5rem;

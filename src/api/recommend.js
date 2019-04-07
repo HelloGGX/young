@@ -1,5 +1,5 @@
 import { HTTP } from 'utils/request'
-import { jsonp } from 'common/js/jsonp'
+import jsonp from 'common/js/jsonp'
 import { commonParams, options, qqcommonParams } from './config'
 
 class RecommendModel extends HTTP {

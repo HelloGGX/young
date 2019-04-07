@@ -6,6 +6,7 @@
       <div class="music-list_cover">
         <img src="@/common/images/music-list_bg@2x.png" alt="">
       </div>
+      <div class="filter" ref="filter"></div>
       <div class="music-list_inner">
         <img class="music-list_img" :src="musicList.picUrl" alt="">
         <div class="music-list_info">
@@ -35,7 +36,7 @@
       </ul>
     </div>
     <div class="bg-layer" ref="layer"></div>
-    <scroll class="scroll" ref="list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
+    <scroll class="list" ref="list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div>
         <song-list :songs="songs" @select="selectItem"></song-list>
       </div>
@@ -50,7 +51,7 @@ import SongList from 'base/song-list/song-list'
 import { prefixStyle } from 'common/js/dom'
 import { mapGetters, mapActions } from 'vuex'
 
-const RESERVED_HEIGHT = 60
+const RESERVED_HEIGHT = 70
 const transform = prefixStyle('transform')
 
 export default {
@@ -80,7 +81,7 @@ export default {
   mounted () {
     this.imageHeight = this.$refs.bgImage.clientHeight + this.$refs.do.clientHeight
     this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
-    this.$refs.list.$el.style['top'] = `${this.imageHeight}px`
+    this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight + 10}px,0)`
   },
   created () {
     this.probeType = 3
@@ -110,22 +111,29 @@ export default {
       let translateY = Math.max(this.minTransalteY, newVal) // layer移动的最大高度不能超过minTransalteY
       let scale = 1
       let zIndex = 0
-
+      let blur = 0
       const percent = Math.abs(newVal / this.imageHeight)
-
       if (newVal > 0) {
-        scale = 1 + percent
+        scale = 1 + percent / 5
+      } else {
+        blur = Math.min(0.8, percent * 2)
+        console.log(blur)
       }
       this.$refs.layer.style['transform'] = `translate3d(0,${translateY}px,0)`
+      this.$refs.filter.style['background'] = `rgba(7, 17, 27,${blur})`
+      this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight + 10 + translateY}px,0)`
       if (newVal < this.minTransalteY) {
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
         this.$refs.bgImage.style.overflow = 'hidden'
+        this.$refs.list.$el.style['overflow'] = 'hidden'
         // this.$refs.playBtn.style.display = 'none'
       } else {
-        this.$refs.bgImage.style.paddingTop = '46%'
+        let paddingY = Math.min(20, translateY) / 10
+        this.$refs.bgImage.style.paddingTop = `${46 + paddingY}%`
         this.$refs.bgImage.style.height = 0
         this.$refs.bgImage.style.overflow = 'initial'
+        this.$refs.list.$el.style['overflow'] = 'initial'
         // this.$refs.playBtn.style.display = ''
       }
       this.$refs.bgImage.style[transform] = `scale(${scale})`
@@ -146,7 +154,7 @@ export default {
     left: 0;
     right: 0;
     top: 0;
-    z-index: 1;
+    z-index: 2;
 }
 .music-list {
   &_cover {
@@ -156,7 +164,16 @@ export default {
     top: 0;
     img {
       height: 108%;
+      width: 100%;
     }
+  }
+  .filter {
+     position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 110%;
+        z-index: 1;
   }
   &_bg {
     position: relative;
@@ -166,7 +183,7 @@ export default {
     background-size: cover;
   }
   &_do {
-    padding: 0.2rem 0.1rem;
+    padding: 0.2rem 0.1rem 0;
     margin-top: 0.1rem;
     ul {
     display: flex;
@@ -193,7 +210,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 0.14rem 0.2rem;
+    padding: 0 0.2rem;
   }
   &_img {
     width: 1rem;
@@ -216,6 +233,13 @@ export default {
     p {
       font-size: 0.12rem;
     }
+  }
+  .list {
+     position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
   }
 }
 .bg-layer {

@@ -9,17 +9,20 @@
         </div>
         <div class="normal-player_middle" @click="toggleMode">
           <transition name="fade">
-          <div class="middle-l" ref="middleL" v-show="!lyricMode">
-            <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd" :class="cdCls">
-                <img class="image" :src="currentSong.pic">
+            <div class="middle-l" ref="middleL" v-show="!lyricMode">
+              <div class="cd-wrapper" ref="cdWrapper">
+                <div class="cd" :class="cdCls">
+                  <img class="image" :src="currentSong.pic">
+                </div>
+              </div>
+              <div class="playing-lyric-wrapper">
+                <div
+                  class="playing-lyric playing-lyric__now"
+                  v-if="currentLyric && currentLyric.lines.length>0"
+                >{{playingLyric}}</div>
+                <div class="playing-lyric playing-lyric__now" v-else>轻音乐,暂无歌词</div>
               </div>
             </div>
-            <div class="playing-lyric-wrapper">
-              <div class="playing-lyric playing-lyric__now" v-if="currentLyric && currentLyric.lines.length>0">{{playingLyric}}</div>
-              <div class="playing-lyric playing-lyric__now" v-else>轻音乐,暂无歌词</div>
-            </div>
-          </div>
           </transition>
 
           <scroll
@@ -43,16 +46,17 @@
               </div>
             </div>
           </scroll>
-
         </div>
         <div class="bottom">
           <div class="operators operators__top" v-show="!lyricMode">
-             <div class="icon">
+            <div class="icon">
               <i class="iconfont i-shoucang1"></i>
-             </div>
-             <div class="icon">
-               <a :href="currentSong.url"><i class="iconfont i-xiazai"></i></a>
-             </div>
+            </div>
+            <div class="icon">
+              <a :href="currentSong.url">
+                <i class="iconfont i-xiazai"></i>
+              </a>
+            </div>
           </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
@@ -83,8 +87,24 @@
         </div>
       </div>
     </transition>
-    <transition name="mini">
-      <div class="mini-player" v-show="!fullScreen"></div>
+    <transition name="fade" >
+      <div class="mini-player" v-show="!fullScreen" @click="open">
+        <div class="icon">
+          <img :class="cdCls" width="40" height="40" :src="currentSong.pic">
+        </div>
+        <div class="text">
+          <h2 class="name" v-html="currentSong.title"></h2>
+          <p class="desc" v-html="currentSong.author"></p>
+        </div>
+        <div class="control">
+          <progress-circle :radius="radius" :percent="percent">
+            <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
+          </progress-circle>
+        </div>
+        <div class="control">
+          <i class="icon-playlist"></i>
+        </div>
+      </div>
     </transition>
     <audio
       ref="audio"
@@ -106,6 +126,7 @@ import Scroll from 'base/scroll/scroll'
 import { playMode } from 'common/js/config'
 import { mapGetters, mapMutations } from 'vuex'
 import ProgressBar from 'base/progress-bar/progress-bar'
+import ProgressCircle from 'base/progress-circle/progress-circle'
 import Lyric from 'lyric-parser'
 
 const songModel = new SongModel()
@@ -116,6 +137,7 @@ export default {
       songReady: false,
       currentTime: 0,
       playingLyric: '',
+      radius: 32,
       currentLineNum: 0,
       currentShow: 'cd',
       lyricMode: false,
@@ -132,6 +154,9 @@ export default {
         : this.mode === playMode.loop
           ? 'i-danquxunhuan'
           : 'i-suijibofang'
+    },
+    miniIcon () {
+      return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
     },
     percent () {
       return this.currentTime / this.currentSong.duration
@@ -151,6 +176,12 @@ export default {
     ])
   },
   methods: {
+    back () {
+      this.setFullScreen(false)
+    },
+    open () {
+      this.setFullScreen(true)
+    },
     toggleMode () {
       this.lyricMode = !this.lyricMode
     },
@@ -289,13 +320,6 @@ export default {
         this.currentLyric.seek(0)
       }
     },
-    ...mapMutations({
-      setPlaylist: 'SET_PLAYLIST',
-      setFullscreen: 'SET_FULL_SCREEN',
-      setPlayingState: 'SET_PLAYING_STATE',
-      setPlayMode: 'SET_PLAY_MODE',
-      setCurrentIndex: 'SET_CURRENT_INDEX'
-    }),
     format (interval) {
       interval = interval | 0
       const minute = (interval / 60) | 0
@@ -310,12 +334,14 @@ export default {
       }
       return num
     },
-    back () {
-      this.setFullscreen(false)
-    },
-    open () {
-      this.setFullScreen(true)
-    }
+    ...mapMutations({
+      setPlaylist: 'SET_PLAYLIST',
+      setFullScreen: 'SET_FULL_SCREEN',
+      setPlayingState: 'SET_PLAYING_STATE',
+      setPlayMode: 'SET_PLAY_MODE',
+      setCurrentIndex: 'SET_CURRENT_INDEX'
+    })
+
   },
   watch: {
     currentSong (newSong, oldSong) {
@@ -325,7 +351,12 @@ export default {
       if (newSong.mid === oldSong.mid) {
         return
       }
-
+      if (this.currentLyric) {
+        this.currentLyric.stop()
+        this.currentTime = 0
+        this.playingLyric = ''
+        this.currentLineNum = 0
+      }
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.$refs.audio.play()
@@ -337,12 +368,20 @@ export default {
       this.$nextTick(() => {
         newPlaying ? audio.play() : audio.pause()
       })
+    },
+    fullScreen (newVal) {
+      if (newVal) {
+        setTimeout(() => {
+          this.$refs.lyricList.refresh()
+        }, 20)
+      }
     }
   },
   components: {
     Navbar,
     ProgressBar,
-    Scroll
+    Scroll,
+    ProgressCircle
   }
 }
 </script>
@@ -521,6 +560,66 @@ export default {
       }
       &__top {
         height: 0.4rem;
+      }
+    }
+  }
+  .mini-player {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 2;
+    width: 100%;
+    height: 0.6rem;
+    background:@color-theme;
+    .icon {
+      flex: 0.24;
+      width: 0.6rem;
+      padding: 0 10px 0 10px;
+      img {
+        // &.play {
+        //   animation: rotate 10s linear infinite;
+        // }
+
+        // &.pause {
+        //   animation-play-state: paused;
+        // }
+      }
+    }
+    .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      line-height: 20px;
+      overflow: hidden;
+      .name {
+        margin-bottom: 2px;
+        font-size: @font-size-medium;
+        color: @color-text;
+      }
+      .desc {
+        font-size: @font-size-small;
+        color: @color-text-d;
+      }
+    }
+    .control {
+      flex: 0.2;
+      width: 30px;
+      padding: 0;
+      .icon-play-mini,
+      .icon-pause-mini,
+      .icon-playlist {
+        font-size: 30px;
+        color:rgba(255, 255, 255, 0.6)
+      }
+
+      .icon-mini {
+        font-size: 32px;
+        position: absolute;
+        left: 0;
+        top: 0;
       }
     }
   }

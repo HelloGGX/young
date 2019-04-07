@@ -34,6 +34,7 @@ export default {
     },
     clearQuery () {
       this.query = ''
+      this.$emit('clear')
     }
   },
   created () {

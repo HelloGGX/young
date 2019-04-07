@@ -126,6 +126,7 @@ class HTTP {
         })
         .catch((err) => {
           const resp = err.response
+          console.log(err)
           if (resp.status === 404) {
             reject(this.createError(404, 'need auth')) // 异步操作失败时调用，并将异步操作爆出的错误作为参数传递出去
           }
