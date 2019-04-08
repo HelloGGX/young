@@ -18,6 +18,7 @@
       </keep-alive>
     </transition>
     <player></player>
+
     <loading :show="isLoading"></loading>
   </div>
 </template>

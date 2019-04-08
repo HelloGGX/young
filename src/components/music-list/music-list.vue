@@ -117,7 +117,6 @@ export default {
         scale = 1 + percent / 5
       } else {
         blur = Math.min(0.8, percent * 2)
-        console.log(blur)
       }
       this.$refs.layer.style['transform'] = `translate3d(0,${translateY}px,0)`
       this.$refs.filter.style['background'] = `rgba(7, 17, 27,${blur})`
@@ -240,6 +239,7 @@ export default {
       bottom: 0;
       width: 100%;
       height: 100%;
+      max-width: 640px;
   }
 }
 .bg-layer {

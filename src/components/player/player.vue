@@ -101,7 +101,7 @@
             <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
           </progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="show">
           <i class="icon-playlist"></i>
         </div>
       </div>
@@ -115,6 +115,7 @@
       @timeupdate="updateTime"
       @ended="end"
     ></audio>
+    <add-song :show="showLists" @showup="showup"></add-song>
   </div>
 </template>
 
@@ -128,7 +129,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import Lyric from 'lyric-parser'
-
+import AddSong from 'components/add-song/add-song'
 const songModel = new SongModel()
 
 export default {
@@ -141,7 +142,8 @@ export default {
       currentLineNum: 0,
       currentShow: 'cd',
       lyricMode: false,
-      currentLyric: null
+      currentLyric: null,
+      showLists: false
     }
   },
   computed: {
@@ -176,6 +178,12 @@ export default {
     ])
   },
   methods: {
+    showup (v) {
+      this.showLists = v
+    },
+    show () {
+      this.showLists = true
+    },
     back () {
       this.setFullScreen(false)
     },
@@ -381,7 +389,8 @@ export default {
     Navbar,
     ProgressBar,
     Scroll,
-    ProgressCircle
+    ProgressCircle,
+    AddSong
   }
 }
 </script>
