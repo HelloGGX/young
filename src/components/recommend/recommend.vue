@@ -25,7 +25,7 @@
             </li>
           </ul>
         </div>
-        <div class="recommend-list">
+        <div class="recommend-dt">
           <h1 class="list-title">电台</h1>
           <ul>
             <li class="item" v-for="item in radioList" :key="item.radioid">
@@ -106,14 +106,7 @@ export default {
     height: 100%;
     overflow: hidden;
     position: relative;
-    .recommend-list {
-      ul {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-      .list-title {
+    .list-title {
         font-size: 0.16rem;
         color: @color-theme-txt;
         line-height: 0.45rem;
@@ -123,12 +116,51 @@ export default {
           font-family: "iconfont" !important;
         }
       }
+    .recommend-list {
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
       .item {
         width: 30%;
         display: inline-block;
         margin-bottom: 0.1rem;
         font-size: 0.14rem;
 
+        .icon {
+          margin-bottom: 0.1rem;
+          img {
+            overflow: hidden;
+            border-radius: 8px;
+          }
+        }
+        .text {
+          .name {
+            line-height: 1.28em;
+            font-size: 1em;
+            word-wrap: break-word;
+          }
+          .desc {
+            font-size: 0.857em;
+          }
+        }
+      }
+    }
+    .recommend-dt{
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+      .item {
+          width: 40%;
+          display: inline-block;
+          margin-bottom: 0.1rem;
+          font-size: 0.14rem;
         .icon {
           margin-bottom: 0.1rem;
           img {

@@ -256,10 +256,12 @@ export default {
     },
     handleLyric ({ lineNum, txt }) {
       this.currentLineNum = lineNum
-      // console.log(this.$refs.lyricLine)
+      // console.log(this.$refs.lyricList)
       if (lineNum > 5) {
-        let lineEl = this.$refs.lyricLine[lineNum - 5]
-        this.$refs.lyricList.scrollToElement(lineEl, 1000)
+        this.$nextTick(() => {
+          let lineEl = this.$refs.lyricLine[lineNum - 5]
+          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+        })
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
