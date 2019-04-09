@@ -80,7 +80,7 @@
             <div class="icon" @click="next">
               <i class="iconfont i-youbofang"></i>
             </div>
-            <div class="icon">
+            <div class="icon" @click.stop="show">
               <i class="iconfont i-menu-fold"></i>
             </div>
           </div>
@@ -88,7 +88,7 @@
       </div>
     </transition>
     <transition name="fade" >
-      <div class="mini-player" v-show="!fullScreen" @click="open">
+      <div class="mini-player" v-show="!fullScreen && miniShow" @click="open">
         <div class="icon">
           <img :class="cdCls" width="40" height="40" :src="currentSong.pic">
         </div>
@@ -115,7 +115,7 @@
       @timeupdate="updateTime"
       @ended="end"
     ></audio>
-      <add-song :show="showLists" @showup="showup"></add-song>
+      <add-song :show="showAddSong" @showup="showup"></add-song>
   </div>
 </template>
 
@@ -143,10 +143,14 @@ export default {
       currentShow: 'cd',
       lyricMode: false,
       currentLyric: null,
-      showLists: false
+      showLists: false, // 判断正在播放的底部弹层列表的显示和隐藏
+      miniShow: true
     }
   },
   computed: {
+    showAddSong () {
+      return this.playlist.length !== 0 && this.showLists
+    },
     playIcon () {
       return this.playing ? 'i-zanting' : 'i-bofang'
     },
@@ -354,6 +358,9 @@ export default {
   watch: {
     currentSong (newSong, oldSong) {
       if (!newSong.mid) {
+        this.setFullScreen(false)
+        this.miniShow = false
+        this.showLists = false
         return
       }
       if (newSong.mid === oldSong.mid) {
@@ -367,10 +374,12 @@ export default {
       }
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
+        this.miniShow = true
         this.$refs.audio.play()
         this.getLyric()
       }, 1000)
     },
+
     playing (newPlaying) {
       const audio = this.$refs.audio
       this.$nextTick(() => {

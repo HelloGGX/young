@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div class="app"  @touchmove.prevent>
     <navbar :title="title" class="app_navbar">
       <template v-slot:left>
         <img src="./common/images/align-left.png" alt="">

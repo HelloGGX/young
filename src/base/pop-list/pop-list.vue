@@ -1,13 +1,13 @@
 <!-- 底部弹出层内嵌列表组件 -->
 <template>
-  <scroll ref="songList" class="song-list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll">
+  <scroll ref="songList" class="song-list" :data="songs" @scroll="scroll" :probe-type="probeType" :listen-scroll="listenScroll">
     <ul>
-      <li class="song-list_item" :class="{'current-song':index==currentIndex}" v-for="(song, index) in songs" :key="song.mid" @click="selectItem(song,index)">
+      <li ref="songLine" class="song-list_item" :class="{'current-song':index==currentIndex}" v-for="(song, index) in songs" :key="song.mid" @click.stop="selectItem(song,index)">
           <div class="song-list_content">
               <h2 class="song-list_name">{{song.title}}</h2>
               <span class="song-list_desc">{{song.author}}</span>
           </div>
-          <div class="song-list_icon">
+          <div class="song-list_icon" @click.stop="deleteSong(song,index)">
             <i class="iconfont i-clear"></i>
           </div>
       </li>
@@ -37,12 +37,33 @@ export default {
       'currentIndex'
     ])
   },
+  mounted () {
+    if (this.songs.length === 0) {
+      return
+    }
+    let lineEl = this.$refs.songLine[this.currentIndex]
+    this.$refs.songList.scrollToElement(lineEl, 1000)
+  },
   methods: {
+    scroll (p) {
+      if (p.y > 0) {
+        this.$emit('scrollTop', p.y)
+      }
+    },
+    deleteSong (item, index) {
+      this.$emit('delete', item, index)
+    },
     selectItem (item, index) {
       this.$emit('select', item, index)
     },
     refresh () {
       this.$refs.songList.refresh()
+    }
+  },
+  watch: {
+    currentIndex (newIndex) {
+      let lineEl = this.$refs.songLine[newIndex]
+      this.$refs.songList.scrollToElement(lineEl, 1000)
     }
   },
   components: {

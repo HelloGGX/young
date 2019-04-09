@@ -13,7 +13,7 @@
     <div ref="shortcutWrapper" class="shortcut-wrapper">
       <scroll class="scroll" :data="songs" ref="shortcut" :probe-type="probeType" :listen-scroll="listenScroll" :pullUpLoad="pullUpLoad" @pullingUp="pullingUp">
           <div>
-            <song-list :songs="songs" @select="selectItem"></song-list>
+            <song-list :songs="songs" @select="selectSong"></song-list>
           </div>
       </scroll>
     </div>
@@ -69,14 +69,11 @@ export default {
         }
       })
     },
-    selectItem (item, index) {
-      this.selectPlay({
-        list: this.songs,
-        index
-      })
+    selectSong (song) {
+      this.insertSong(song)
     },
     ...mapActions([
-      'selectPlay'
+      'insertSong'
     ]),
     back () {
       window.history.length > 1

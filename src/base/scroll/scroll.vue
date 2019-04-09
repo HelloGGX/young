@@ -111,6 +111,7 @@ export default {
       default: false
     },
     bounce: {
+      type: Boolean,
       default: true
     }
   },

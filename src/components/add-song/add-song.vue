@@ -2,7 +2,7 @@
 <template>
   <div class="add-song">
     <transition name="popup">
-      <popup :show="show"  @show="showup">
+      <popup :show="show"  @show="showup" :transY="transY">
         <template v-slot:header>
           <div class="add-song_header">
             <div class="add-song_mode" @click="changeMode">
@@ -10,13 +10,13 @@
               <span v-html="modeTxt"></span>
               <span v-html="listLen"></span>
             </div>
-            <div class="add-song_clear">
+            <div class="add-song_clear" @click="clear">
               <i class="iconfont i-delete"></i>
             </div>
           </div>
         </template>
         <template v-slot:content>
-          <pop-list :songs="playlist" @select="selectItem"></pop-list>
+          <pop-list :songs="playlist" @select="selectItem" @delete="deleteItem" @scrollTop="scrollTop"></pop-list>
         </template>
       </popup>
     </transition>
@@ -26,7 +26,7 @@
 <script  type='text/ecmascript-6'>
 import Popup from 'base/popup/popup'
 import popList from 'base/pop-list/pop-list'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'lodash'
 
@@ -39,6 +39,7 @@ export default {
   },
   data () {
     return {
+      transY: 0
     }
   },
   computed: {
@@ -72,6 +73,9 @@ export default {
   },
 
   methods: {
+    scrollTop (res) {
+      this.transY = res
+    },
     changeMode () {
       const mode = (this.mode + 1) % 3
 
@@ -96,9 +100,21 @@ export default {
     },
     selectItem (item, index) {
       this.setCurrentIndex(index)
+      this.setPlayingState(true)
     },
+    deleteItem (item, index) {
+      this.deleteSong(item)
+    },
+    clear () {
+      this.deleteSongList()
+    },
+    ...mapActions([
+      'deleteSong',
+      'deleteSongList'
+    ]),
     ...mapMutations({
       setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayingState: 'SET_PLAYING_STATE',
       setPlayMode: 'SET_PLAY_MODE',
       setPlaylist: 'SET_PLAYLIST'
     })

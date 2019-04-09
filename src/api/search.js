@@ -12,7 +12,6 @@ export class SearchModel extends HTTP {
       nu: nu,
       id: id
     })
-    console.log(data)
     return this.get(url, data)
   }
 }
