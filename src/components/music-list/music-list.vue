@@ -39,7 +39,7 @@
     <div class="bg-layer" ref="layer"></div>
     <scroll class="list" ref="list" :data="songs" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div>
-        <song-list :songs="songs" @select="selectItem"></song-list>
+        <song-list :songs="songs" @select="selectItem" @toMv="toMv"></song-list>
       </div>
     </scroll>
   </div>
@@ -91,6 +91,9 @@ export default {
     this.listenScroll = true
   },
   methods: {
+    toMv (song) {
+      this.$emit('toMv', song)
+    },
     back () {
       window.history.length > 1
         ? this.$router.go(-1)

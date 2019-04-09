@@ -1,16 +1,16 @@
+
 import { HTTP } from 'utils/request'
-import { commonParams } from './config'
+import { commonParamsMv, options } from './config'
 
 export class MvModel extends HTTP {
-  getSearch ({ id = '', page = 1 } = {}) {
+  getMv ({ word = '', page = 1 } = {}) {
     let emptyObj = Object.create(null)
-    const url = '/music/api/mv'
-    const data = Object.assign(emptyObj, commonParams, {
-      mv: 'qq',
+    const url = '/music/api/mv/'
+    const data = Object.assign(emptyObj, commonParamsMv, {
       page: page,
       type: 'so',
-      id: id
+      word: word
     })
-    return this.get(url, data)
+    return this.get(url, data, options)
   }
 }

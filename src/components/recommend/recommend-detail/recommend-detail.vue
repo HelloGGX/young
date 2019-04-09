@@ -1,9 +1,14 @@
 <!-- 歌单推荐详情页 -->
 <template>
 
-    <div class="recommend-detail">
-        <music-list :songs=songs :title="title"></music-list>
-    </div>
+  <div class="recommend-detail page">
+    <music-list
+      :songs=songs
+      :title="title"
+      @toMv="toMv"
+    ></music-list>
+
+  </div>
 
 </template>
 
@@ -20,6 +25,12 @@ export default {
     }
   },
   methods: {
+    toMv (song) {
+      this.$router.push({
+        path: `/mv/${song.title}`
+      })
+    },
+
     _getRecommendDetail (id) {
       recommendmode.getSongList({ id: id }).then(res => {
         if (res.Code === 'OK') {
@@ -40,5 +51,4 @@ export default {
 
 </script>
 <style lang='less' scoped>
-
 </style>

@@ -96,7 +96,7 @@ export default {
 
 <style lang="less" scoped>
 @import "~@/common/less/variable.less";
-
+@import "~@/common/less/mixin.less";
 .recommend {
   max-width: 640px;
   width: 100%;
@@ -132,6 +132,7 @@ export default {
 
         .icon {
           margin-bottom: 0.1rem;
+
           img {
             overflow: hidden;
             border-radius: 8px;
@@ -161,8 +162,14 @@ export default {
           display: inline-block;
           margin-bottom: 0.1rem;
           font-size: 0.14rem;
+          .bg-image('cd');
+          background-position: 8px -1px;
+          padding: 0.18rem 0.28rem 0 0;
+          background-size: 92%;
+          background-repeat: no-repeat;
         .icon {
           margin-bottom: 0.1rem;
+
           img {
             overflow: hidden;
             border-radius: 8px;

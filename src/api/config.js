@@ -3,6 +3,10 @@ export const commonParams = {
   size: 'hq',
   cache: 1 // 开启缓存
 }
+export const commonParamsMv = {
+  key: '523077333',
+  mv: 'qq'
+}
 export const qqcommonParams = {
   g_tk: 5381,
   inCharset: 'utf-8',
