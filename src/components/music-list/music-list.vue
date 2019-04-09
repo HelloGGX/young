@@ -1,12 +1,13 @@
 <!-- 歌单推荐详情页 -->
 <template>
   <div class="music-list page">
-    <navbar :title="title" class="music-list_navbar" @back="back"></navbar>
+    <navbar ref="navbar" :title="title" class="music-list_navbar" @back="back"></navbar>
+    <div class="filter" ref="filter"></div>
     <div class="music-list_bg" :style="bgStyle" ref="bgImage">
       <div class="music-list_cover">
         <img src="@/common/images/music-list_bg@2x.png" alt="">
       </div>
-      <div class="filter" ref="filter"></div>
+
       <div class="music-list_inner">
         <img class="music-list_img" :src="musicList.picUrl" alt="">
         <div class="music-list_info">
@@ -79,9 +80,11 @@ export default {
     }
   },
   mounted () {
-    this.imageHeight = this.$refs.bgImage.clientHeight + this.$refs.do.clientHeight
+    this.imageHeight = this.$refs.bgImage.clientHeight + this.$refs.do.clientHeight + 10
     this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
-    this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight + 10}px,0)`
+    this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight}px,0)`
+    this.$refs.layer.style['top'] = `${this.imageHeight}px`
+    this.$refs.filter.style['height'] = `${this.imageHeight}px`
   },
   created () {
     this.probeType = 3
@@ -120,20 +123,21 @@ export default {
       }
       this.$refs.layer.style['transform'] = `translate3d(0,${translateY}px,0)`
       this.$refs.filter.style['background'] = `rgba(7, 17, 27,${blur})`
-      this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight + 10 + translateY}px,0)`
+      this.$refs.filter.style['height'] = `${this.imageHeight + translateY}px`
+      // this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight + 10 + translateY}px,0)`
       if (newVal < this.minTransalteY) {
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
         this.$refs.bgImage.style.overflow = 'hidden'
-        this.$refs.list.$el.style['overflow'] = 'hidden'
-        // this.$refs.playBtn.style.display = 'none'
+        this.$refs.navbar.$el.style['backgroundColor'] = `rgba(31, 16, 55,1)`
+        // this.$refs.list.$el.style['overflow'] = 'hidden'
       } else {
         let paddingY = Math.min(20, translateY) / 10
         this.$refs.bgImage.style.paddingTop = `${46 + paddingY}%`
         this.$refs.bgImage.style.height = 0
         this.$refs.bgImage.style.overflow = 'initial'
-        this.$refs.list.$el.style['overflow'] = 'initial'
-        // this.$refs.playBtn.style.display = ''
+        this.$refs.navbar.$el.style['backgroundColor'] = `rgba(31, 16, 55,0)`
+        // this.$refs.list.$el.style['overflow'] = 'initial'
       }
       this.$refs.bgImage.style[transform] = `scale(${scale})`
       this.$refs.bgImage.style.zIndex = zIndex
@@ -154,6 +158,7 @@ export default {
     right: 0;
     top: 0;
     z-index: 2;
+
 }
 .music-list {
   &_cover {
@@ -171,7 +176,6 @@ export default {
         top: 0;
         left: 0;
         width: 100%;
-        height: 110%;
         z-index: 1;
   }
   &_bg {
@@ -239,12 +243,16 @@ export default {
       bottom: 0;
       width: 100%;
       height: 100%;
+      z-index: 1;
       max-width: 640px;
   }
 }
 .bg-layer {
-  position: relative;
-  height: 100%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   background: @color-background-d;
 }
 </style>

@@ -3,10 +3,22 @@
 }
 .fade-leave,.fade-enter-to {
   opacity: 1;
+  transform: translateY(0);
 }
 .fade-enter,.fade-leave-to {
   opacity: 0;
-  height: 0
+  transform: translateY(70%);
+}
+.popup-enter-active,.popup-leave-active {
+  transition: all ease .4s;
+}
+.popup-leave,.popup-enter-to {
+  opacity: 1;
+  //transform: translateY(100%)
+}
+.popup-enter,.popup-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
 }
 .dialog-enter-active {
   animation: dialog-in .5s;

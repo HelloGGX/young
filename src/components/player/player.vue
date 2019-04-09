@@ -115,7 +115,7 @@
       @timeupdate="updateTime"
       @ended="end"
     ></audio>
-    <add-song :show="showLists" @showup="showup"></add-song>
+      <add-song :show="showLists" @showup="showup"></add-song>
   </div>
 </template>
 
