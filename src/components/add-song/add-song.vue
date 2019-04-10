@@ -115,8 +115,7 @@ export default {
     },
     ...mapActions([
       'deleteSong',
-      'deleteSongList',
-      'insertSong'
+      'deleteSongList'
     ]),
     ...mapMutations({
       setCurrentIndex: 'SET_CURRENT_INDEX',

@@ -7,16 +7,16 @@
               <div class="mv_mask">
                   <img :src="playIcon" alt="">
               </div>
-              <img :src="mv.mv_pic_url" alt="">
+              <img v-lazy="mv.mv_pic_url"  alt="">
+              <div class="mv_title">
+                <p>{{mv.mv_name}}</p>
+              </div>
               <div class="mv_info">
                 <span class="mv_playcount"><i class="iconfont i-bofang"></i>{{norimizePlayCount(mv.play_count)}}</span>
                 <span class="mv_duration"><i></i>{{normizeDuration(mv.duration)}}</span>
               </div>
             </div>
-            <div class="mv_singer">
-              <div class="singer_img"></div>
-              <div class="singer_info"></div>
-            </div>
+
           </li>
         </ul>
   </scroll>
@@ -55,6 +55,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .mv_lists {
+  top:0.66rem;
   ul li{
     padding: 0.1rem 0.2rem;
     .mv_img {
@@ -75,10 +76,24 @@ export default {
           right: 0;
           margin: auto;
         }
+
       }
       >img {
         overflow: hidden;
         border-radius: 0.1rem;
+      }
+      .mv_title {
+        top: 0;
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 80%;
+        padding: 0 0.1rem;
+        line-height: 0.4rem;
+        font-size: 0.14rem;
+        p {
+overflow: hidden;text-overflow: ellipsis; white-space: nowrap;
+        }
       }
       .mv_info {
         position: absolute;

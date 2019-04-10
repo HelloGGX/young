@@ -52,6 +52,9 @@
             <div class="icon">
               <i class="iconfont i-shoucang1"></i>
             </div>
+            <div class="icon" @click.stop="toMv(currentSong)">
+              <img src="@/common/images/video@2x.png" alt="">
+            </div>
             <div class="icon">
               <a :href="currentSong.url">
                 <i class="iconfont i-xiazai"></i>
@@ -183,6 +186,12 @@ export default {
   },
 
   methods: {
+    toMv (song) {
+      this.$router.push({
+        path: `/mv/${song.title}`
+      })
+      this.back()
+    },
     showup (v) {
       this.showLists = v
     },
@@ -577,6 +586,9 @@ export default {
         flex: 1;
         color: #fff;
         text-align: center;
+        >img {
+          width: 0.24rem;
+        }
         > a {
           color: #fff;
         }
