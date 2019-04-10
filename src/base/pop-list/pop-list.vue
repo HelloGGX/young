@@ -2,7 +2,7 @@
 <template>
   <scroll ref="songList" class="song-list" :data="songs" @scroll="scroll" :probe-type="probeType" :listen-scroll="listenScroll">
     <ul>
-      <li ref="songLine" class="song-list_item" :class="{'current-song':index==currentIndex}" v-for="(song, index) in songs" :key="song.mid" @click.stop="selectItem(song,index)">
+      <li ref="songLine" class="song-list_item" :class="{'current-song':index===findIndex}" v-for="(song, index) in songs" :key="song.mid" @click.stop="selectItem(song,index)">
           <div class="song-list_content">
               <h2 class="song-list_name">{{song.title}}</h2>
               <span class="song-list_desc">{{song.author}}</span>
@@ -33,20 +33,31 @@ export default {
     }
   },
   computed: {
+    findIndex () {
+      return this.sequenceList.findIndex(item => {
+        return item.mid === this.currentSong.mid
+      })
+    },
     ...mapGetters([
       'currentIndex',
       'currentSong',
-      'mode'
+      'mode',
+      'sequenceList'
     ])
   },
   mounted () {
-    if (this.songs.length === 0) {
-      return
-    }
-    let lineEl = this.$refs.songLine[this.currentIndex]
-    this.$refs.songList.scrollToElement(lineEl, 1000)
+    setTimeout(() => {
+      this.toCurrentLine(this.sequenceList)
+    }, 20)
   },
   methods: {
+    toCurrentLine (lists) {
+      let index = lists.findIndex(item => {
+        return item.mid === this.currentSong.mid
+      })
+      let lineEl = this.$refs.songLine[index]
+      this.$refs.songList.scrollToElement(lineEl, 1000)
+    },
     scroll (p) {
       if (p.y > 0) {
         this.$emit('scrollTop', p.y)
@@ -55,11 +66,16 @@ export default {
     deleteSong (item, index) {
       this.$emit('delete', item, index)
     },
-    selectItem (item, index) {
-      this.$emit('select', item, index)
+    selectItem (item) {
+      this.$emit('select', item)
     },
     refresh () {
       this.$refs.songList.refresh()
+    }
+  },
+  watch: {
+    currentIndex () {
+      this.toCurrentLine(this.sequenceList)
     }
   },
   components: {

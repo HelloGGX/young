@@ -82,8 +82,9 @@ export default {
 
       this.setPlayMode(mode)
       let list = null
+      let sequenceArray = this.sequenceList.slice()
       if (mode === playMode.random) {
-        list = shuffle(this.sequenceList)
+        list = shuffle(sequenceArray)
       } else {
         list = this.sequenceList
       }
@@ -99,7 +100,10 @@ export default {
     showup (v) {
       this.$emit('showup', v)
     },
-    selectItem (item, index) {
+    selectItem (song) {
+      let index = this.playlist.findIndex(item => {
+        return item.mid === song.mid
+      })
       this.setCurrentIndex(index)
       this.setPlayingState(true)
     },
@@ -120,13 +124,6 @@ export default {
       setPlayMode: 'SET_PLAY_MODE',
       setPlaylist: 'SET_PLAYLIST'
     })
-  },
-  watch: {
-    mode (mode) {
-      if (mode === playMode.random) {
-        this.insertSong(this.currentSong)
-      }
-    }
   }
 
 }

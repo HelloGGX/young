@@ -297,6 +297,10 @@ export default {
         // 如果列表只有一首歌
         this.loop()
       } else {
+        if (this.mode === playMode.loop) {
+          this.loop()
+          return
+        }
         let index = this.currentIndex + 1
         if (index === this.playlist.length) {
           // 如果已经到了最后一首歌
@@ -316,6 +320,10 @@ export default {
         // 如果列表只有一首歌
         this.loop()
       } else {
+        if (this.mode === playMode.loop) {
+          this.loop()
+          return
+        }
         let index = this.currentIndex - 1
         if (index === -1) {
           // 如果第一首歌
