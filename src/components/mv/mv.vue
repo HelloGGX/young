@@ -2,20 +2,14 @@
 <template>
   <div class="mv page">
       <navbar ref="navbar" :title="navTitle" class="mv_navbar" @back="back"></navbar>
-      <div class="mv_lists">
-        <ul>
-          <li v-for="(index,mv) in mvs" :key="mv.id">
-
-          </li>
-        </ul>
-      </div>
+      <mv-list :mvs="mvs"></mv-list>
   </div>
 </template>
 
 <script type='text/ecmascript-6'>
 import Navbar from 'components/navbar/navbar'
 import { MvModel } from 'api/mv'
-
+import MvList from 'base/mv-list/mv-list'
 const mvModel = new MvModel()
 
 export default {
@@ -29,14 +23,20 @@ export default {
       return this.$route.params.word
     }
   },
-  created () {
-    this._getVideo(this.$route.params.word)
+  beforeRouteEnter (to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+    next(vm => {
+    // 通过 `vm` 访问组件实例
+      vm._getVideo(to.params.word)
+    })
   },
   methods: {
     _getVideo (word) {
       mvModel.getMv({ word: encodeURI(word) }).then(res => {
         console.log(res)
-        this.mvs = res.mvs
+        this.mvs = res.data.mv.list
       })
     },
     back () {
@@ -46,7 +46,8 @@ export default {
     }
   },
   components: {
-    Navbar
+    Navbar,
+    MvList
   }
 }
 
