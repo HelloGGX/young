@@ -181,6 +181,7 @@ export default {
       'playing'
     ])
   },
+
   methods: {
     showup (v) {
       this.showLists = v

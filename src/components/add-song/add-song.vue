@@ -16,7 +16,7 @@
           </div>
         </template>
         <template v-slot:content>
-          <pop-list :songs="playlist" @select="selectItem" @delete="deleteItem" @scrollTop="scrollTop"></pop-list>
+          <pop-list :songs="sequenceList" @select="selectItem" @delete="deleteItem" @scrollTop="scrollTop"></pop-list>
         </template>
       </popup>
     </transition>
@@ -39,7 +39,8 @@ export default {
   },
   data () {
     return {
-      transY: 0
+      transY: 0,
+      songs: []
     }
   },
   computed: {
@@ -110,7 +111,8 @@ export default {
     },
     ...mapActions([
       'deleteSong',
-      'deleteSongList'
+      'deleteSongList',
+      'insertSong'
     ]),
     ...mapMutations({
       setCurrentIndex: 'SET_CURRENT_INDEX',
@@ -118,7 +120,15 @@ export default {
       setPlayMode: 'SET_PLAY_MODE',
       setPlaylist: 'SET_PLAYLIST'
     })
+  },
+  watch: {
+    mode (mode) {
+      if (mode === playMode.random) {
+        this.insertSong(this.currentSong)
+      }
+    }
   }
+
 }
 
 </script>

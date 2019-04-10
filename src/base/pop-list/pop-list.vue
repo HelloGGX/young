@@ -34,7 +34,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentIndex'
+      'currentIndex',
+      'currentSong',
+      'mode'
     ])
   },
   mounted () {
@@ -58,12 +60,6 @@ export default {
     },
     refresh () {
       this.$refs.songList.refresh()
-    }
-  },
-  watch: {
-    currentIndex (newIndex) {
-      let lineEl = this.$refs.songLine[newIndex]
-      this.$refs.songList.scrollToElement(lineEl, 1000)
     }
   },
   components: {
