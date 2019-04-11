@@ -6,12 +6,12 @@ import VueRouter from 'vue-router'
 import store from './store/index'
 import './registerServiceWorker'
 
-import fastclick from 'fastclick'
+// import fastclick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
 
 import 'common/less/index.less'
 
-fastclick.attach(document.body)
+// fastclick.attach(document.body)
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,

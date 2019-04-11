@@ -2,7 +2,7 @@
 <template>
   <scroll :data="mvs" class="mv_lists page">
         <ul>
-          <li v-for="mv in mvs" :key="mv.mv_id">
+          <li v-for="mv in mvs" :key="mv.mv_id" @click="getMvUrl(mv.v_id)">
             <div class="mv_img">
               <div class="mv_mask">
                   <img :src="playIcon" alt="">
@@ -36,7 +36,8 @@ export default {
   },
   data () {
     return {
-      playIcon: playIcon
+      playIcon: playIcon,
+      mvInfo: {}
     }
   },
   methods: {
@@ -45,7 +46,11 @@ export default {
     },
     norimizePlayCount (v) {
       return normizeCount(v)
+    },
+    getMvUrl (id) {
+      this.$emit('getMvUrl', id)
     }
+
   },
   components: {
     Scroll

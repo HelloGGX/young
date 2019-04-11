@@ -8,6 +8,7 @@ const state = {// 状态管理
   singer: {},
   playing: false,
   fullScreen: false,
+  mvFullScreen: false, // mv全屏
   playlist: [],
   sequenceList: [],
   mode: playMode.sequence,

@@ -11,9 +11,9 @@
       </navbar>
     <search-box :disabled="disabled" class="search_box" @query="query"></search-box>
     <div ref="shortcutWrapper" class="shortcut-wrapper">
-      <scroll class="scroll" :data="songs" ref="shortcut" :probe-type="probeType" :listen-scroll="listenScroll" :pullUpLoad="pullUpLoad" @pullingUp="pullingUp">
+      <scroll class="scroll" :data="results" ref="shortcut" :probe-type="probeType" :listen-scroll="listenScroll" :pullUpLoad="pullUpLoad" @pullingUp="pullingUp">
           <div>
-            <song-list :songs="songs" @select="selectSong"></song-list>
+            <song-list :songs="results" @select="selectSong" @toMv="toMv"></song-list>
           </div>
       </scroll>
     </div>
@@ -38,7 +38,7 @@ export default {
     return {
       title: '搜索',
       disabled: false,
-      songs: [],
+      results: [],
       pullUpLoad: true,
       q: '',
       noMore: false,
@@ -56,6 +56,11 @@ export default {
     this.listenScroll = true
   },
   methods: {
+    toMv (song) {
+      this.$router.push({
+        path: `/mv/${song.title}`
+      })
+    },
     handlePlaylist (playlist) {
       const bottom = playlist.length > 0 ? '80px' : ''
       this.$refs.shortcut.$el.style.bottom = bottom
@@ -65,7 +70,7 @@ export default {
       searchModel.getSearch({ id: key }).then(res => {
         if (res.Code === 'OK') {
           totalnum = res.songnum
-          this.songs = res.Body
+          this.results = res.Body
         }
       })
     },
@@ -82,9 +87,14 @@ export default {
     },
     query (v) {
       if (v === '') {
-        this.songs = []
+        this.results = []
         return
+      } else {
+        setTimeout(() => {
+          this.$refs.shortcut.refresh()
+        }, 20)
       }
+
       this.q = encodeURI(v)
       this._getSearch(this.q)
     },
@@ -92,7 +102,6 @@ export default {
       let page = this.page++
       if (this.hasMore()) {
         searchModel.getSearch({ id: this.q, page: page }).then(res => {
-          console.log(res)
           if (res.Body) {
             this.setMoreData(res.Body)
           }
@@ -100,7 +109,7 @@ export default {
       }
     },
     hasMore () {
-      if (this.songs.length >= totalnum) {
+      if (this.results.length >= totalnum) {
         this.noMore = true
         return false
       } else {
@@ -109,18 +118,8 @@ export default {
       }
     },
     setMoreData (dataArray) {
-      const songLists = this.songs.concat(dataArray)
-      this.songs = songLists
-      console.log(this.songs)
-    }
-  },
-  watch: {
-    query (newQuery) {
-      if (!newQuery) {
-        setTimeout(() => {
-          this.$refs.shortcut.refresh()
-        }, 20)
-      }
+      const songLists = this.results.concat(dataArray)
+      this.results = songLists
     }
   }
 }

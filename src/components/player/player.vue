@@ -53,12 +53,15 @@
               <i class="iconfont i-shoucang1"></i>
             </div>
             <div class="icon" @click.stop="toMv(currentSong)">
-              <img src="@/common/images/video@2x.png" alt="">
+              <i class="iconfont i-bofang"></i>
             </div>
             <div class="icon">
               <a :href="currentSong.url">
                 <i class="iconfont i-xiazai"></i>
               </a>
+            </div>
+            <div class="icon">
+              <i class="iconfont i-Moreoptionshorizon"></i>
             </div>
           </div>
           <div class="progress-wrapper">

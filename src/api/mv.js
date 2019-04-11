@@ -13,4 +13,13 @@ export class MvModel extends HTTP {
     })
     return this.get(url, data, options)
   }
+  getMvDetail ({ id = '' }) {
+    let emptyObj = Object.create(null)
+    const url = '/music/api/mv/'
+    const data = Object.assign(emptyObj, commonParamsMv, {
+      id: id,
+      type: 'info'
+    })
+    return this.get(url, data, options)
+  }
 }

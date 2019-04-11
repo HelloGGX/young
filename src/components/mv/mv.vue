@@ -2,7 +2,8 @@
 <template>
   <div class="mv page">
       <navbar ref="navbar" :title="navTitle" class="mv_navbar" @back="back"></navbar>
-      <mv-list :mvs="mvs"></mv-list>
+      <mv-list :mvs="mvs" @getMvUrl="getMvUrl"></mv-list>
+      <my-video :mvInfo="mvInfo"></my-video>
   </div>
 </template>
 
@@ -10,12 +11,15 @@
 import Navbar from 'components/navbar/navbar'
 import { MvModel } from 'api/mv'
 import MvList from 'base/mv-list/mv-list'
+import MyVideo from 'base/v-video/v-video'
+import { mapMutations } from 'vuex'
 const mvModel = new MvModel()
 
 export default {
   data () {
     return {
-      mvs: []
+      mvs: [],
+      mvInfo: {}
     }
   },
   computed: {
@@ -35,19 +39,29 @@ export default {
   methods: {
     _getVideo (word) {
       mvModel.getMv({ word: encodeURI(word) }).then(res => {
-        console.log(res)
         this.mvs = res.data.mv.list
+      })
+    },
+    getMvUrl (id) {
+      mvModel.getMvDetail({ id: id }).then(res => {
+        this.mvInfo = res
+        console.log(res)
+        this.setMvFullScreen(true)
       })
     },
     back () {
       window.history.length > 1
         ? this.$router.go(-1)
         : this.$router.push('/')
-    }
+    },
+    ...mapMutations({
+      setMvFullScreen: 'SET_MV_FULL_SCREEN'
+    })
   },
   components: {
     Navbar,
-    MvList
+    MvList,
+    MyVideo
   }
 }
 

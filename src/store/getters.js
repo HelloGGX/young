@@ -7,6 +7,7 @@ const getters = {
   singer: state => state.singer,
   playing: state => state.playing,
   fullScreen: state => state.fullScreen,
+  mvFullScreen: state => state.mvFullScreen,
   playlist: state => state.playlist,
   sequenceList: state => state.sequenceList,
   mode: state => state.mode,

@@ -2,7 +2,7 @@
 <template>
   <div class="song-list">
     <ul>
-      <li class="song-list_item" v-for="(song, index) in songs" :key="song.mid" @click="selectItem(song,index)">
+      <li class="song-list_item" v-for="(song, index) in songs"  @click="selectItem(song,index)">
           <img class="song-list_img" v-lazy="song.pic" alt="">
           <div class="song-list_content">
               <h2 class="song-list_name">{{song.title}}</h2>
