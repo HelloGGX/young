@@ -285,9 +285,8 @@ export default {
 
 <style lang="less">
 .list-wrapper {
-    // position: relative;
-    // height: 100%;
-    // overflow: hidden;
+    position: relative;
+    height: 100%;
     .scroll-content {
       position: relative;
       z-index: 1;

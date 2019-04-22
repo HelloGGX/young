@@ -2,6 +2,7 @@ const recommend = () => import(/* webpackChunkName: "recommend" */ 'components/r
 const recommendDetail = () => import(/* webpackChunkName: "recommendDetail" */ 'components/recommend/recommend-detail/recommend-detail')
 const search = () => import(/* webpackChunkName: "search" */ 'components/search/search')
 const mv = () => import(/* webpackChunkName: "mv" */ 'components/mv/mv')
+const singer = () => import(/* webpackChunkName: "singer" */ 'components/singer/singer')
 
 export default [{
   path: '/',
@@ -28,4 +29,10 @@ export default [{
   path: '/mv/:word',
   name: 'mv',
   component: mv
-}]
+},
+{
+  path: '/singer',
+  name: 'Singer',
+  component: singer
+}
+]

@@ -56,7 +56,7 @@
               <i class="iconfont i-bofang"></i>
             </div>
             <div class="icon">
-              <a :href="currentSong.url">
+              <a :href="currentSong.url" :download="currentSong.title">
                 <i class="iconfont i-xiazai"></i>
               </a>
             </div>

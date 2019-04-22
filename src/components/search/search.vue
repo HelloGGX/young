@@ -13,7 +13,7 @@
     <div ref="shortcutWrapper" class="shortcut-wrapper">
       <scroll class="scroll" :data="results" ref="shortcut" :probe-type="probeType" :listen-scroll="listenScroll" :pullUpLoad="pullUpLoad" @pullingUp="pullingUp">
           <div>
-            <song-list :songs="results" @select="selectSong" @toMv="toMv"></song-list>
+            <song-list :songs="results" @select="selectSong" @toMv="toMv" :showImg="showImg"></song-list>
           </div>
       </scroll>
     </div>
@@ -37,6 +37,7 @@ export default {
   data () {
     return {
       title: '搜索',
+      showImg: false,
       disabled: false,
       results: [],
       pullUpLoad: true,

@@ -5,10 +5,10 @@
       <router-link tag="div" class="tab-item" to="/recommend">
         <span class="tab-link">热门推荐</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/line">
+      <router-link tag="div" class="tab-item" to="/singer">
         <span class="tab-link">歌手</span>
       </router-link>
-      <router-link tag="div" class="tab-item" to="/add">
+      <router-link tag="div" class="tab-item" to="/rank">
         <span class="tab-link">排行</span>
       </router-link>
     </div>

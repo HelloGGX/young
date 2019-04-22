@@ -2,8 +2,8 @@
 <template>
   <div class="song-list">
     <ul>
-      <li class="song-list_item" v-for="(song, index) in songs"  @click="selectItem(song,index)">
-          <img class="song-list_img" v-lazy="song.pic" alt="">
+      <li class="song-list_item" :style="searchMode" v-for="(song, index) in songs"  @click="selectItem(song,index)">
+          <img class="song-list_img" v-show="showImg" v-lazy="song.pic" alt="">
           <div class="song-list_content">
               <h2 class="song-list_name">{{song.title}}</h2>
               <p class="song-list_desc">{{song.author}}</p>
@@ -23,6 +23,15 @@ export default {
     songs: {
       type: Array,
       default: () => []
+    },
+    showImg: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    searchMode () {
+      return this.showImg ? '' : `margin:0.2rem 0`
     }
   },
   methods: {

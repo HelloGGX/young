@@ -103,9 +103,7 @@ export default {
   top: 1.3rem;
   .recommend-content {
     padding: 0 0.12rem 0;
-    height: 100%;
     overflow: hidden;
-    position: relative;
     .list-title {
         font-size: 0.16rem;
         color: @color-theme-txt;
