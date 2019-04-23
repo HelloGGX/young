@@ -288,7 +288,7 @@ export default {
     position: relative;
     height: 100%;
     .scroll-content {
-      position: relative;
+      //position: relative;
       z-index: 1;
     }
     .list-content {

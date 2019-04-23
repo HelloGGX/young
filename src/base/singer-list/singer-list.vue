@@ -1,9 +1,9 @@
 <template>
+<div class="singer-list">
   <scroll @scroll="scroll"
           :listen-scroll="listenScroll"
           :probe-type="probeType"
           :data="data"
-          class="singer-list"
           ref="singerList">
     <ul>
       <li v-for="group in data" class="list-group" ref="listGroup" :key="group.title">
@@ -16,10 +16,19 @@
         </ul>
       </li>
     </ul>
-    <div class="list-fixed" ref="fixed" v-show="fixedTitle">
-      <div class="fixed-title">{{fixedTitle}} </div>
-    </div>
   </scroll>
+  <div class="list-shortcut" @touchstart.stop.prevent="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove"
+         @touchend.stop>
+      <ul>
+        <li v-for="(item, index) in shortcutList" :data-index="index" class="item" :class="{'current':currentIndex===index}" :key="item">
+          {{item}}
+        </li>
+      </ul>
+    </div>
+  <div class="list-fixed" ref="fixed" v-show="fixedTitle">
+    <div class="fixed-title">{{fixedTitle}} </div>
+  </div>
+</div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -35,6 +44,11 @@ export default {
     }
   },
   computed: {
+    shortcutList () {
+      return this.data.map((group) => {
+        return group.title.substr(0, 1)
+      })
+    },
     fixedTitle () {
       if (this.scrollY > 0) {
         return ''
@@ -69,13 +83,24 @@ export default {
         height += item.clientHeight
         this.listHeight.push(height)
       }
+    },
+    onShortcutTouchStart (e) {
+      let firstTouch = e.touches[0]
+      this.touch.y1 = firstTouch.pageY
+      let index = 3
+      this.$refs.singerList.scrollToElement(this.$refs.listGroup[index])
+      console.log(this.touch.y1)
+    },
+    onShortcutTouchMove (e) {
+      let firstTouch = e.touches[0]
+      this.touch.y2 = firstTouch.pageY
+      console.log(this.touch.y2)
     }
   },
   watch: {
     data () {
       setTimeout(() => {
         this._calculateHeight()
-        console.log(this.listHeight)
       }, 20)
     },
     scrollY (newY) {
@@ -117,6 +142,8 @@ export default {
 
 .singer-list {
   overflow: hidden;
+  height: 100%;
+  position: relative;
 }
 .list-group {
   &_title{
@@ -142,6 +169,31 @@ export default {
       font-size: @font-size-medium;
     }
   }
+}
+.list-shortcut {
+  position: absolute;
+  z-index: 30;
+  right: 0;
+  top: 45%;
+  transform: translateY(-50%);
+  width: 20px;
+  padding: 20px 0;
+  border-radius: 10px;
+  text-align: center;
+  background: @color-background-d;
+  font-family: Helvetica;
+  .item {
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    line-height: 1;
+    color: @color-text-l;
+    font-size: @font-size-small;
+    &.current {
+      color: @color-subtheme
+    }
+  }
+
 }
 .list-fixed{
       position: absolute;
