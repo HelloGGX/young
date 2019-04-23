@@ -4,6 +4,7 @@
   <div class="singer-detail page">
     <music-list
       :songs=songs
+      :info=info
       :title="getTitle"
       @toMv="toMv"
     ></music-list>
@@ -17,13 +18,15 @@ import MusicList from 'components/music-list/music-list'
 import { SingerModel } from 'api/singer'
 import { mapGetters } from 'vuex'
 import { createSong } from 'common/js/song'
+import { createSinger } from 'common/js/singer'
 const singerModel = new SingerModel()
 
 export default {
   data () {
     return {
       songs: [],
-      title: ''
+      title: '',
+      info: {}
     }
   },
   created () {
@@ -50,7 +53,14 @@ export default {
       }
       singerModel.getSingerDetail(this.singer.id).then(res => {
         if (res.code === 0) {
-          this.songs = this._normalizeSongs(res.data.list)
+          const data = res.data
+
+          this.info = createSinger({
+            singer_mid: data.singer_mid,
+            total: data.total,
+            singer_name: data.singer_name
+          })
+          this.songs = this._normalizeSongs(data.list)
         }
       })
     },

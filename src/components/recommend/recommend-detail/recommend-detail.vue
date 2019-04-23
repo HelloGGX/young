@@ -3,6 +3,7 @@
 
   <div class="recommend-detail page">
     <music-list
+      :info = getInfo
       :songs=songs
       :title="title"
       @toMv="toMv"
@@ -15,13 +16,25 @@
 <script  type='text/ecmascript-6'>
 import MusicList from 'components/music-list/music-list'
 import { RecommendModel } from 'api/recommend'
-
+import { mapGetters } from 'vuex'
 const recommendmode = new RecommendModel()
 export default {
   data () {
     return {
       songs: [],
       title: '歌单'
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'musicList'
+    ]),
+    getInfo () {
+      return {
+        picUrl: this.musicList.picUrl,
+        author: this.musicList.songListAuthor,
+        desc: this.musicList.songListDesc
+      }
     }
   },
   methods: {

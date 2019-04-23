@@ -9,10 +9,10 @@
       </div>
 
       <div class="music-list_inner">
-        <img class="music-list_img" :src="musicList.picUrl" alt="">
+        <img class="music-list_img" :src="info.picUrl" alt="">
         <div class="music-list_info">
-          <h3>{{musicList.songListAuthor}}</h3>
-          <p>{{musicList.songListDesc}}</p>
+          <h3>{{info.author}}</h3>
+          <p>{{info.desc}}</p>
         </div>
       </div>
     </div>
@@ -50,13 +50,17 @@ import Scroll from 'base/scroll/scroll'
 import Navbar from 'components/navbar/navbar'
 import SongList from 'base/song-list/song-list'
 import { prefixStyle } from 'common/js/dom'
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 const RESERVED_HEIGHT = 70
 const transform = prefixStyle('transform')
 
 export default {
   props: {
+    info: {
+      type: Object,
+      default: () => {}
+    },
     songs: {
       type: Array,
       default: () => []
@@ -72,11 +76,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([
-      'musicList'
-    ]),
     bgStyle () {
-      return `background-image:url(${this.musicList.picUrl})`
+      return `background-image:url(${this.info.picUrl})`
     }
   },
   mounted () {
