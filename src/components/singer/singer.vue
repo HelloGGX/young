@@ -1,18 +1,22 @@
 <!-- 歌手列表页 -->
 <template>
   <div class="singer page">
-      <singer-list :data="singers"></singer-list>
+      <singer-list :data="singers" @select="select"></singer-list>
       <router-view></router-view>
   </div>
 </template>
 
 <script  type='text/ecmascript-6'>
-import { getSingerList } from 'api/singer'
+import { SingerModel } from 'api/singer'
 import SingerList from 'base/singer-list/singer-list'
 import Navbar from 'components/navbar/navbar'
 import Singer from 'common/js/singer'
+import { mapMutations } from 'vuex'
+
 const HOT_SINGER_LEN = 10
 const HOT_NAME = '热门'
+
+const singerModel = new SingerModel()
 
 export default {
   data () {
@@ -26,10 +30,9 @@ export default {
 
   methods: {
     _getSingerList () {
-      getSingerList().then((res) => {
+      singerModel.getSingerList().then((res) => {
         if (res.code === 0) {
           this.singers = this._normalizeSinger(res.data.list)
-          console.log(this.singers)
         }
       })
     },
@@ -74,7 +77,16 @@ export default {
         return a.title.charCodeAt(0) - b.title.charCodeAt(0)
       })
       return hot.concat(ret)
-    }
+    },
+    select (item) {
+      this.$router.push({
+        path: `/singer/detail`
+      })
+      this.setSinger(item)
+    },
+    ...mapMutations({
+      setSinger: 'SET_SINGER'
+    })
   },
   components: {
     SingerList,

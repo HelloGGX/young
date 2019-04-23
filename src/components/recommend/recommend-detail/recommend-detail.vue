@@ -37,6 +37,7 @@ export default {
           this.songs = res.Body
           this.title = res.listname
         }
+        console.log(this.songs)
       })
     }
   },

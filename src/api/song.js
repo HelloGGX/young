@@ -1,6 +1,5 @@
 import { HTTP } from 'utils/request'
-import jsonp from 'common/js/jsonp'
-import { commonParams, options } from './config'
+import { commonParams } from './config'
 
 class SongModel extends HTTP {
   getLyric (opt) {
@@ -16,10 +15,10 @@ class SongModel extends HTTP {
     let emptyObj = Object.create(null)
     const url = '/music/api/'
     const data = Object.assign(emptyObj, commonParams, {
-      type: 'url',
+      type: 'song',
       id: opt.id
     })
-    return jsonp(url, data, options)
+    return this.get(url, data)
   }
 }
 export { SongModel }

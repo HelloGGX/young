@@ -3,7 +3,7 @@ const recommendDetail = () => import(/* webpackChunkName: "recommendDetail" */ '
 const search = () => import(/* webpackChunkName: "search" */ 'components/search/search')
 const mv = () => import(/* webpackChunkName: "mv" */ 'components/mv/mv')
 const singer = () => import(/* webpackChunkName: "singer" */ 'components/singer/singer')
-
+const singerDetail = () => import(/* webpackChunkName: "singerDetail" */ 'components/singer/singer-detail/singer-detail')
 export default [{
   path: '/',
   redirect: '/recommend',
@@ -33,6 +33,11 @@ export default [{
 {
   path: '/singer',
   name: 'Singer',
-  component: singer
+  component: singer,
+  children: [{
+    path: '/singer/detail',
+    name: 'singerDetail',
+    component: singerDetail
+  }]
 }
 ]

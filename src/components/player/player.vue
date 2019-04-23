@@ -114,7 +114,7 @@
     </transition>
     <audio
       ref="audio"
-      :src="currentSong.url"
+      :src="songSrc"
       @canplay="canpaly"
       @play="ready"
       @error="error"
@@ -136,6 +136,7 @@ import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import Lyric from 'lyric-parser'
 import AddSong from 'components/add-song/add-song'
+
 const songModel = new SongModel()
 
 export default {
@@ -147,10 +148,12 @@ export default {
       radius: 32,
       currentLineNum: 0,
       currentShow: 'cd',
+      duration: '',
       lyricMode: false,
       currentLyric: null,
       showLists: false, // 判断正在播放的底部弹层列表的显示和隐藏
-      miniShow: true
+      miniShow: true,
+      songUrl: ''
     }
   },
   computed: {
@@ -171,10 +174,13 @@ export default {
       return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
     },
     percent () {
-      return this.currentTime / this.currentSong.duration
+      return this.currentTime / this.duration
     },
     cdCls () {
       return this.playing ? 'play' : 'play pause'
+    },
+    songSrc () {
+      return this.songUrl !== '' ? this.songUrl : this.currentSong.url
     },
     ...mapGetters([
       'sequenceList',
@@ -187,7 +193,9 @@ export default {
       'playing'
     ])
   },
-
+  created () {
+    this.current = { duration: 0 }
+  },
   methods: {
     toMv (song) {
       this.$router.push({
@@ -240,10 +248,10 @@ export default {
       this.setCurrentIndex(index)
     },
     onProgressBarChange (percent) {
-      if (!this.currentSong.duration) {
+      if (!this.duration) {
         return
       }
-      const currentTime = this.currentSong.duration * percent
+      const currentTime = this.duration * percent
       this.$refs.audio.currentTime = currentTime
       if (!this.playing) {
         this.togglePlaying()
@@ -267,6 +275,13 @@ export default {
           this.currentLineNum = 0
         })
     },
+    _getSongUrl (id) {
+      songModel.getSongUrl({ id: id }).then(res => {
+        this.songUrl = res.url
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     handleLyric ({ lineNum, txt }) {
       this.currentLineNum = lineNum
       // console.log(this.$refs.lyricList)
@@ -283,7 +298,7 @@ export default {
     canpaly () {
       // 解决audio获取到播放地址后，能获取duration的问题
       const totalTime = this.$refs.audio.duration
-      this.currentSong.duration = totalTime
+      this.duration = totalTime
     },
     ready () {
       this.songReady = true
@@ -388,6 +403,9 @@ export default {
       }
       if (newSong.mid === oldSong.mid) {
         return
+      }
+      if (!('url' in newSong)) {
+        this._getSongUrl(newSong.mid)
       }
       if (this.currentLyric) {
         this.currentLyric.stop()
