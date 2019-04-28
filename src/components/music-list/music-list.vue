@@ -81,13 +81,13 @@ export default {
     }
   },
   mounted () {
-    setTimeout(() => {
+    this.$nextTick(function () {
       this.imageHeight = this.$refs.bgImage.clientHeight + this.$refs.do.clientHeight + 10
       this.minTransalteY = -this.imageHeight + RESERVED_HEIGHT
       this.$refs.list.$el.style['transform'] = `translate3d(0,${this.imageHeight}px,0)`
       this.$refs.layer.style['top'] = `${this.imageHeight}px`
       this.$refs.filter.style['height'] = `${this.imageHeight}px`
-    }, 20)
+    })
   },
   created () {
     this.probeType = 3
