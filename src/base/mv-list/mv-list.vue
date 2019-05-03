@@ -60,7 +60,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .mv_lists {
-  top:0.66rem;
+  top:1rem;
   ul li{
     padding: 0.1rem 0.2rem;
     .mv_img {

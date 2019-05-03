@@ -12,7 +12,7 @@
       </template>
     </navbar>
     <tab class="app_tab"></tab>
-    <transition name="fade">
+    <transition name="slide">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -34,7 +34,7 @@ import Player from 'components/player/player'
 export default {
   data () {
     return {
-      transition: 'fade'
+      transition: 'slide'
     }
   },
   methods: {

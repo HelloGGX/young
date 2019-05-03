@@ -48,7 +48,7 @@ export default {
 <style lang='less' scoped>
 @import '~@/common/less/variable.less';
 .song-list {
-  padding: 0 0.12rem;
+  padding: 0.12rem;
 }
 .song-list_item {
   display: flex;

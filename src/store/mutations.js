@@ -36,6 +36,9 @@ const mutations = {
   },
   [types.SET_SINGER] (state, singer) {
     state.singer = singer
+  },
+  [types.SET_RANK] (state, rank) {
+    state.rank = rank
   }
 }
 

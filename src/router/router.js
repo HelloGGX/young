@@ -4,6 +4,9 @@ const search = () => import(/* webpackChunkName: "search" */ 'components/search/
 const mv = () => import(/* webpackChunkName: "mv" */ 'components/mv/mv')
 const singer = () => import(/* webpackChunkName: "singer" */ 'components/singer/singer')
 const singerDetail = () => import(/* webpackChunkName: "singerDetail" */ 'components/singer/singer-detail/singer-detail')
+const rankList = () => import(/* webpackChunkName: "rankList" */ 'components/rank-list/rank-list')
+const rankDetail = () => import(/* webpackChunkName: "rankDetail" */ 'components/rank-list/rank-detail/rank-detail')
+
 export default [{
   path: '/',
   redirect: '/recommend',
@@ -38,6 +41,16 @@ export default [{
     path: '/singer/detail',
     name: 'singerDetail',
     component: singerDetail
+  }]
+},
+{
+  path: '/rank',
+  name: 'Rank',
+  component: rankList,
+  children: [{
+    path: '/rank/detail',
+    name: 'rankDetail',
+    component: rankDetail
   }]
 }
 ]

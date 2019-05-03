@@ -95,6 +95,9 @@ export default {
   },
   methods: {
     toMv (song) {
+      this.$router.push({
+        path: `/mv/${song.title}`
+      })
       this.$emit('toMv', song)
     },
     back () {

@@ -6,7 +6,6 @@
       :info = getInfo
       :songs=songs
       :title="title"
-      @toMv="toMv"
     ></music-list>
 
   </div>
@@ -38,12 +37,6 @@ export default {
     }
   },
   methods: {
-    toMv (song) {
-      this.$router.push({
-        path: `/mv/${song.title}`
-      })
-    },
-
     _getRecommendDetail (id) {
       recommendmode.getSongList({ id: id }).then(res => {
         if (res.Code === 'OK') {

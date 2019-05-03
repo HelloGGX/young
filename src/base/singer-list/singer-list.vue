@@ -166,9 +166,9 @@ export default {
 }
 .list-group {
   &_title{
-     height: 30px;
-      line-height: 30px;
-      padding-left: 20px;
+     height: 0.3rem;
+      line-height: 0.3rem;
+      padding-left: 0.2rem;
       font-size: @font-size-small;
       color:#fff;
       background: @color-theme;
@@ -176,14 +176,14 @@ export default {
   &_item{
     display: flex;
     align-items: center;
-    padding: 20px 0 0 30px;
+    padding: 0.2rem 0 0 0.3rem;
     .avatar {
-      width: 50px;
-      height: 50px;
+      width: 0.5rem;
+      height: 0.5rem;
       border-radius: 50%;
     }
     .name {
-      margin-left: 20px;
+      margin-left: 0.2rem;
       color: @color-text-l;
       font-size: @font-size-medium;
     }
@@ -195,16 +195,16 @@ export default {
   right: 0;
   top: 45%;
   transform: translateY(-50%);
-  width: 20px;
-  padding: 20px 0;
-  border-radius: 10px;
+  width: 0.2rem;
+  padding: 0.2rem 0;
+  border-radius: 0.1rem;
   text-align: center;
   background: rgba(102, 23, 131, 0.26);
   font-family: Helvetica;
   .item {
-    width: 20px;
-    height: 20px;
-    padding: 3px;
+    width: 0.2rem;
+    height: 0.2rem;
+    padding: 0.03rem;
     line-height: 1;
     color: @color-text-l;
     font-size: @font-size-small;
@@ -220,9 +220,9 @@ export default {
       left: 0;
       width: 100%;
       .fixed-title {
-        height: 30px;
-        line-height: 30px;
-        padding-left: 20px;
+        height: 0.3rem;
+        line-height: 0.3rem;
+        padding-left: 0.2rem;
         font-size: @font-size-small;
         color:#fff;
         background: @color-theme;

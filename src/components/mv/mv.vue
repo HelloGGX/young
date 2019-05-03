@@ -1,8 +1,8 @@
 <!-- mv组件 -->
 <template>
   <div class="mv page">
-      <navbar ref="navbar" :title="navTitle" class="mv_navbar" @back="back"></navbar>
       <mv-list :mvs="mvs" @getMvUrl="getMvUrl"></mv-list>
+      <navbar ref="navbar" :title="navTitle" class="mv_navbar" @back="back"></navbar>
       <my-video :mvInfo="mvInfo"></my-video>
   </div>
 </template>
@@ -35,6 +35,12 @@ export default {
     // 通过 `vm` 访问组件实例
       vm._getVideo(to.params.word)
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    // 导航离开该组件的对应路由时调用
+    // 可以访问组件实例 `this`
+    this.mvs = []
+    next()
   },
   methods: {
     _getVideo (word) {
@@ -72,6 +78,6 @@ export default {
     left: 0;
     right: 0;
     top: 0;
-    z-index: 2;
+    z-index: 1;
 }
 </style>

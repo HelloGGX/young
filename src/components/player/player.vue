@@ -508,8 +508,8 @@ export default {
           overflow: hidden;
           text-align: center;
           .playing-lyric {
-            height: 20px;
-            line-height: 20px;
+            height: 0.2rem;
+            line-height: 0.2rem;
             font-size: @font-size-medium;
             color: @color-theme-txt;
             &__now {
@@ -530,9 +530,9 @@ export default {
           overflow: hidden;
           text-align: center;
           .text {
-            line-height: 32px;
+            line-height: 0.32rem;
             color: @color-text-l;
-            font-size: @font-size-medium;
+            font-size: 0.14rem;
             &.current {
               color: @color-text;
             }
@@ -629,9 +629,11 @@ export default {
     display: flex;
     align-items: center;
     position: fixed;
-    left: 0;
+    left: 50%;
     bottom: 0;
     z-index: 2;
+    transform: translateX(-50%);
+    max-width: 640px;
     width: 100%;
     height: 0.6rem;
     background:@color-theme;
@@ -660,6 +662,9 @@ export default {
         margin-bottom: 2px;
         font-size: @font-size-medium;
         color: @color-text;
+        overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
       }
       .desc {
         font-size: @font-size-small;

@@ -6,7 +6,6 @@
       :songs=songs
       :info=info
       :title="getTitle"
-      @toMv="toMv"
     ></music-list>
 
   </div>
@@ -41,11 +40,7 @@ export default {
     }
   },
   methods: {
-    toMv (song) {
-      this.$router.push({
-        path: `/mv/${song.title}`
-      })
-    },
+    
     _getSingerDetail () {
       if (!this.singer.id) {
         this.$router.push('/singer')

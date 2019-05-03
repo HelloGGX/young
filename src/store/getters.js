@@ -5,6 +5,7 @@ const getters = {
   loginSucess: state => state.loginSucess,
   musicList: state => state.musicList,
   singer: state => state.singer,
+  rank: state => state.rank,
   playing: state => state.playing,
   fullScreen: state => state.fullScreen,
   mvFullScreen: state => state.mvFullScreen,

@@ -2,7 +2,9 @@
 <template>
   <div class="singer page">
       <singer-list :data="singers" @select="select"></singer-list>
-      <router-view></router-view>
+      <transition name="fade">
+       <router-view ></router-view>
+    </transition>
   </div>
 </template>
 
