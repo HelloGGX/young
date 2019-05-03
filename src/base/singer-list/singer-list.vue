@@ -165,6 +165,7 @@ export default {
   position: relative;
 }
 .list-group {
+  padding-bottom: 0.2rem;
   &_title{
      height: 0.3rem;
       line-height: 0.3rem;

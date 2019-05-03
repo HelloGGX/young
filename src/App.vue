@@ -2,7 +2,7 @@
   <div class="app"  @touchmove.prevent>
     <navbar :title="title" class="app_navbar">
       <template v-slot:left>
-        <img src="./common/images/align-left.png" alt="">
+        <img src="./common/images/align-left.png" alt="" @click="trigger">
       </template>
       <template v-slot:middle>
         <search-box @toSearch="toSearch"></search-box>
@@ -18,7 +18,7 @@
       </keep-alive>
     </transition>
     <player></player>
-
+    <slide-left ref='slideLeft'  :slideshow="slideshow" ></slide-left>
     <loading :show="isLoading"></loading>
   </div>
 </template>
@@ -27,6 +27,7 @@
 import { mapGetters } from 'vuex'
 import Loading from 'base/loading/loading'
 import Navbar from 'components/navbar/navbar'
+import SlideLeft from 'base/slide-left/slide-left'
 import Tab from 'components/tab/tab'
 import SearchBox from 'base/search-box/search-box'
 import Player from 'components/player/player'
@@ -34,7 +35,8 @@ import Player from 'components/player/player'
 export default {
   data () {
     return {
-      transition: 'slide'
+      transition: 'slide',
+      slideshow:false
     }
   },
   methods: {
@@ -42,6 +44,9 @@ export default {
       this.$router.push({
         path: `/search/`
       })
+    },
+    trigger(){
+      this.$refs.slideLeft._show()
     }
   },
   components: {
@@ -49,7 +54,8 @@ export default {
     Navbar,
     Tab,
     SearchBox,
-    Player
+    Player,
+    SlideLeft
   },
   computed: {
     title () {
