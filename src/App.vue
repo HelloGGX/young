@@ -18,7 +18,7 @@
       </keep-alive>
     </transition>
     <player></player>
-    <slide-left ref='slideLeft'  :slideshow="slideshow" ></slide-left>
+    <slide-left ref='slideLeft'></slide-left>
     <loading :show="isLoading"></loading>
   </div>
 </template>
@@ -27,7 +27,7 @@
 import { mapGetters } from 'vuex'
 import Loading from 'base/loading/loading'
 import Navbar from 'components/navbar/navbar'
-import SlideLeft from 'base/slide-left/slide-left'
+import SlideLeft from 'components/slide-left/slide-left'
 import Tab from 'components/tab/tab'
 import SearchBox from 'base/search-box/search-box'
 import Player from 'components/player/player'
@@ -35,8 +35,7 @@ import Player from 'components/player/player'
 export default {
   data () {
     return {
-      transition: 'slide',
-      slideshow:false
+      transition: 'slide'
     }
   },
   methods: {
@@ -46,7 +45,7 @@ export default {
       })
     },
     trigger(){
-      this.$refs.slideLeft._show()
+      this.$refs.slideLeft.show()
     }
   },
   components: {
