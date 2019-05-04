@@ -49,7 +49,6 @@ export default {
     _getRankList() {
       rankModel.getRankList().then(res => {
         this.topList = res.data.topList;
-        console.log(this.topList);
       });
     },
     normizeCount(count) {
