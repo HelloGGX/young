@@ -17,10 +17,8 @@
 </template>
 
 <script type='text/ecmascript-6'>
-import { constants } from "crypto";
-import { setTimeout } from 'timers';
 
-const OPACITY = 0.6 //蒙版的透明度
+const OPACITY = 0.6 // 蒙版的透明度
 const BORDER = 20
 export default {
   props: {
@@ -28,68 +26,68 @@ export default {
       type: Boolean,
       default: false
     },
-    direction:{
+    direction: {
       type: String,
       default: 'left'
     }
   },
-  data() {
+  data () {
     return {
       offsetWidth: 0,
       show: this.slideshow
-    };
+    }
   },
-  created() {
+  created () {
     this.touch = {
       show: this.slideshow
-    };
+    }
   },
-  mounted(){
-    setTimeout(()=>{
-      if(this.direction==='left'){
-        this.$refs.panel.style['left']= 0
-        this.$refs.panel.style['borderRight']=`${BORDER}px solid transparent`
-        this.$refs.panel.style["transform"] = `translate3d(${-this.$refs.panel.clientWidth+BORDER}px,0,0)`;
-      }else if(this.direction==='right'){
-        this.$refs.panel.style['right']= 0
-        this.$refs.panel.style['borderLeft']=`${BORDER}px solid transparent`
-        this.$refs.panel.style["transform"] = `translate3d(${this.$refs.panel.clientWidth-BORDER}px,0,0)`;
+  mounted () {
+    setTimeout(() => {
+      if (this.direction === 'left') {
+        this.$refs.panel.style['left'] = 0
+        this.$refs.panel.style['borderRight'] = `${BORDER}px solid transparent`
+        this.$refs.panel.style['transform'] = `translate3d(${-this.$refs.panel.clientWidth + BORDER}px,0,0)`
+      } else if (this.direction === 'right') {
+        this.$refs.panel.style['right'] = 0
+        this.$refs.panel.style['borderLeft'] = `${BORDER}px solid transparent`
+        this.$refs.panel.style['transform'] = `translate3d(${this.$refs.panel.clientWidth - BORDER}px,0,0)`
       }
-      this.$refs.mask.style["background"] = `rgba(0, 0, 0, 0)`;
-    },20)
+      this.$refs.mask.style['background'] = `rgba(0, 0, 0, 0)`
+    }, 20)
   },
   methods: {
-    slideTouchStart(e) {
-      this.touch.initiated = true;
-      this.touch.startX = e.touches[0].pageX;
-      this.touch.left = this.$refs.panel.clientWidth;
-      this.show = true;
+    slideTouchStart (e) {
+      this.touch.initiated = true
+      this.touch.startX = e.touches[0].pageX
+      this.touch.left = this.$refs.panel.clientWidth
+      this.show = true
     },
-    slideTouchMove(e) {
+    slideTouchMove (e) {
       if (!this.touch.initiated) {
-        return;
+        return
       }
 
-      const deltaX = e.touches[0].pageX - this.touch.startX;
-    
+      const deltaX = e.touches[0].pageX - this.touch.startX
+
       if (this.touch.show) {
-        if(this.direction === 'left'){
-          this.offsetWidth = Math.min(0, deltaX);
-        }else if(this.direction === 'right') {
-          this.offsetWidth = Math.max(0, deltaX);
+        if (this.direction === 'left') {
+          this.offsetWidth = Math.min(0, deltaX)
+        } else if (this.direction === 'right') {
+          this.offsetWidth = Math.max(0, deltaX)
         }
       } else {
-        if(this.direction === 'left'){
-          this.offsetWidth = Math.min(0, -this.touch.left + deltaX);
-        }else if(this.direction === 'right'){
-          this.offsetWidth = Math.max(0, this.touch.left + deltaX);
+        if (this.direction === 'left') {
+          this.offsetWidth = Math.min(0, -this.touch.left + deltaX)
+        } else if (this.direction === 'right') {
+          this.offsetWidth = Math.max(0, this.touch.left + deltaX)
         }
       }
 
-      this._offset(this.offsetWidth);
+      this._offset(this.offsetWidth)
     },
-    slideTouchEnd(e) {
-      this.touch.initiated = false;
+    slideTouchEnd (e) {
+      this.touch.initiated = false
 
       if (Math.abs(this.offsetWidth) > this.touch.left / 2) {
         this._close()
@@ -97,41 +95,41 @@ export default {
         this._show()
       }
     },
-    _offset(offsetWidth) {
-      this.$refs.panel.style["transform"] = `translate3d(${offsetWidth}px,0,0)`;
-      this.$emit("trigger", this.show);
+    _offset (offsetWidth) {
+      this.$refs.panel.style['transform'] = `translate3d(${offsetWidth}px,0,0)`
+      this.$emit('trigger', this.show)
     },
-    _close() {
-      if(this.direction === 'left'){
-        this.offsetWidth = -this.$refs.panel.clientWidth;
-      }else {
-        this.offsetWidth = this.$refs.panel.clientWidth;
+    _close () {
+      if (this.direction === 'left') {
+        this.offsetWidth = -this.$refs.panel.clientWidth
+      } else {
+        this.offsetWidth = this.$refs.panel.clientWidth
       }
-      
-      this.show = false;
-      this.touch.show = false;
-      this._offset(this.offsetWidth);
+
+      this.show = false
+      this.touch.show = false
+      this._offset(this.offsetWidth)
     },
-    _show() {
-      this.offsetWidth = 0;
-      this.show = true;
-      this.touch.show = true;
-      this._offset(this.offsetWidth);
+    _show () {
+      this.offsetWidth = 0
+      this.show = true
+      this.touch.show = true
+      this._offset(this.offsetWidth)
     }
   },
   watch: {
-    offsetWidth(newVal) {
-      let blur = 1;
-      const screenWidth = window.screen.width;
+    offsetWidth (newVal) {
+      let blur = 1
+      const screenWidth = window.screen.width
       const percent = Math.min(
         OPACITY,
         OPACITY - Math.abs(Math.abs(newVal) / screenWidth)
-      );
-      blur = Math.max(0, percent);
-      this.$refs.mask.style["background"] = `rgba(0, 0, 0,${blur})`;
+      )
+      blur = Math.max(0, percent)
+      this.$refs.mask.style['background'] = `rgba(0, 0, 0,${blur})`
     }
   }
-};
+}
 </script>
 
 <style lang='less' scoped>

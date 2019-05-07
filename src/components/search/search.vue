@@ -9,7 +9,7 @@
             <img src="@/common/images/user.png" alt="">
           </template>
       </navbar>
-    <search-box :disabled="disabled" class="search_box" :queryVal="q" @query="query"></search-box>
+    <search-box :disabled="disabled" class="search_box" v-model="q" @query="query"></search-box>
     <div class="history search_history" v-show="showList">
       <div class="history_title">搜索历史</div>
         <ul>
@@ -35,7 +35,6 @@ import { mapActions } from 'vuex'
 import { SearchModel } from 'api/search'
 import { playlistMixin } from 'common/js/mixin'
 import cookies from 'js-cookie'
-import { constants } from 'crypto';
 
 const searchModel = new SearchModel()
 let TOTALNUM = 0
@@ -52,7 +51,7 @@ export default {
       q: '',
       noMore: false,
       page: 1,
-      history:[]
+      history: []
     }
   },
   components: {
@@ -64,20 +63,20 @@ export default {
   created () {
     this.probeType = 3
     this.listenScroll = true
-    if(cookies.get('history')){
+    if (cookies.get('history')) {
       this.history = JSON.parse(cookies.get('history'))['history']
     }
   },
-  computed:{
-    getHistory(){
+  computed: {
+    getHistory () {
       return this.history
     },
-    showList(){
+    showList () {
       return this.results.length === 0
     }
   },
   methods: {
-    
+
     toMv (song) {
       this.$router.push({
         path: `/mv/${song.title}`
@@ -112,33 +111,31 @@ export default {
         this.results = []
         return
       } else {
-        
         setTimeout(() => {
           this.$refs.shortcut.refresh()
         }, 20)
       }
       this.search(v)
-      
     },
-    search(v){
+    search (v) {
       this.addHistory(v)
       this.q = v
       this._getSearch(encodeURI(v))
     },
-    selectHistory(v){
+    selectHistory (v) {
       this.q = v
     },
     addHistory (v) {
       const result = v.trim()
       const obj = Object.create(null)
       let index = this.history.indexOf(result)
-      if(index<0){ //如果历史记录里面没有
+      if (index < 0) { // 如果历史记录里面没有
         this.history.unshift(result)
-        if(this.history.length>8){
+        if (this.history.length > 8) {
           this.history.pop()
         }
-      }else {//如果历史记录里面有
-        this.history.splice(index,1)
+      } else { // 如果历史记录里面有
+        this.history.splice(index, 1)
         this.history.unshift(result)
       }
       obj['history'] = this.history

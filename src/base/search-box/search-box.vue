@@ -10,6 +10,10 @@
 <script>
 import _ from 'lodash'
 export default {
+  model: {
+    prop: 'queryVal',
+    event: 'query'
+  },
   data () {
     return {
       query: ''
@@ -20,8 +24,8 @@ export default {
       type: String,
       default: '搜索歌曲、歌手'
     },
-    queryVal:{
-       type: String,
+    queryVal: {
+      type: String,
       default: ''
     },
     disabled: {
@@ -47,9 +51,9 @@ export default {
       this.$emit('query', newQuery)
     }, 300))
   },
-  watch:{
-    queryVal(v){
-      this.query = v
+  watch: {
+    queryVal (newVal) {
+      this.query = newVal
     }
   }
 }
