@@ -51,7 +51,7 @@
           <div class="operators operators__top" v-show="!lyricMode">
 
             <div class="icon">
-              <star class="operators_star" :value="starInit" :color="starColor">
+              <star class="operators_star" v-model="starInit"  :color="starColor">
                  <i slot="icon" class="iconfont i-shoucang1"></i>
               </star>
             </div>
@@ -399,6 +399,7 @@ export default {
 
   },
   watch: {
+
     currentSong (newSong, oldSong) {
       if (!newSong.mid) {
         this.setFullScreen(false)

@@ -14,6 +14,10 @@ import { isColors } from 'utils/colorRE'
 
 export default {
   name: 'star',
+  model: {
+    prop: 'value',
+    event: 'input'
+  },
   props: {
     value: Boolean,
     animate: String,
@@ -27,14 +31,20 @@ export default {
       toggleColor: false
     }
   },
-
+  watch: {
+    value (newVal, oldVal) {
+      if (this.active === newVal) return
+      this.active = newVal
+      this.toggleAnimate = !this.toggleAnimate
+      this.toggleColor = !this.toggleColor
+    }
+  },
   computed: {
     animateClass () {
       return this.toggleAnimate ? this.animate : ''
     },
     colorValue () {
-      console.log(this.toggleColor)
-      return this.toggleColor ? `${this.color}`: ``
+      return this.toggleColor ? `${this.color}` : ``
     }
   },
   methods: {
@@ -42,7 +52,7 @@ export default {
       this.toggleAnimate = !this.toggleAnimate
       this.toggleColor = !this.toggleColor
       this.active = !this.active
-      this.$emit('input', !this.active)
+      this.$emit('input', this.active)
       this.$emit('change', this)
     }
   },
@@ -69,12 +79,12 @@ export default {
     justify-content: center;
   }
 .VueStar__icon {
-  z-index: 888; /*❤今年888大发*/
+  z-index: 2; /*❤今年888大发*/
 }
 .VueStar__decoration {
   width: 100px;
   height: 100px;
-  
+
   position: absolute;
   left: 0;
   top: 0;
