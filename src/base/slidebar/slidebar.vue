@@ -139,7 +139,7 @@ export default {
 
 .slidebar {
   max-width: 80%;
-  z-index: 2;
+  z-index: 1;
   &_mask {
     position: absolute;
     top: 0;

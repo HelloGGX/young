@@ -20,6 +20,10 @@ export default {
       type: String,
       default: '搜索歌曲、歌手'
     },
+    queryVal:{
+       type: String,
+      default: ''
+    },
     disabled: {
       type: Boolean,
       default: true
@@ -42,6 +46,11 @@ export default {
     this.$watch('query', _.debounce((newQuery) => {
       this.$emit('query', newQuery)
     }, 300))
+  },
+  watch:{
+    queryVal(v){
+      this.query = v
+    }
   }
 }
 

@@ -49,8 +49,11 @@
         </div>
         <div class="bottom">
           <div class="operators operators__top" v-show="!lyricMode">
+
             <div class="icon">
-              <i class="iconfont i-shoucang1"></i>
+              <star class="operators_star" :value="starInit" :color="starColor">
+                 <i slot="icon" class="iconfont i-shoucang1"></i>
+              </star>
             </div>
             <div class="icon" @click.stop="toMv(currentSong)">
               <i class="iconfont i-bofang"></i>
@@ -69,7 +72,7 @@
             <div class="progress-bar-wrapper">
               <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
             </div>
-            <span class="time time-r">{{format(currentSong.duration)}}</span>
+            <span class="time time-r">{{format(duration)}}</span>
           </div>
           <div class="operators operators__bottom">
             <div class="icon" @click="changeMode">
@@ -136,7 +139,7 @@ import ProgressBar from 'base/progress-bar/progress-bar'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import Lyric from 'lyric-parser'
 import AddSong from 'components/add-song/add-song'
-
+import Star from 'base/star/Star'
 const songModel = new SongModel()
 
 export default {
@@ -153,7 +156,9 @@ export default {
       currentLyric: null,
       showLists: false, // 判断正在播放的底部弹层列表的显示和隐藏
       miniShow: true,
-      songUrl: ''
+      songUrl: '',
+      starInit: false,
+      starColor: 'rgb(240,86,84)'
     }
   },
   computed: {
@@ -440,7 +445,8 @@ export default {
     ProgressBar,
     Scroll,
     ProgressCircle,
-    AddSong
+    AddSong,
+    Star
   }
 }
 </script>
@@ -456,7 +462,7 @@ export default {
       height: 100%;
       z-index: -1;
       opacity: 0.6;
-      filter: blur(20px);
+      filter: blur(10px);
       img {
         width: 100%;
       }
@@ -593,6 +599,11 @@ export default {
       display: flex;
       align-items: center;
       height: 0.88rem;
+      &_star{
+        top: -0.48rem;
+        left: 0;
+        right: 0;
+      }
       &_playbtn {
         width: 0.6rem;
         height: 0.6rem;
@@ -604,6 +615,7 @@ export default {
         }
       }
       .icon {
+        position: relative;
         flex: 1;
         color: #fff;
         text-align: center;

@@ -9,8 +9,14 @@
             <img src="@/common/images/user.png" alt="">
           </template>
       </navbar>
-    <search-box :disabled="disabled" class="search_box" @query="query"></search-box>
-    <div ref="shortcutWrapper" class="shortcut-wrapper">
+    <search-box :disabled="disabled" class="search_box" :queryVal="q" @query="query"></search-box>
+    <div class="history search_history" v-show="showList">
+      <div class="history_title">搜索历史</div>
+        <ul>
+          <li v-for="item in getHistory" :key="item" @click="selectHistory(item)"><span class="history_item">{{item}}</span></li>
+        </ul>
+    </div>
+    <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!showList">
       <scroll class="scroll" :data="results" ref="shortcut" :probe-type="probeType" :listen-scroll="listenScroll" :pullUpLoad="pullUpLoad" @pullingUp="pullingUp">
           <div>
             <song-list :songs="results" @select="selectSong" @toMv="toMv" :showImg="showImg"></song-list>
@@ -28,9 +34,11 @@ import Scroll from 'base/scroll/scroll'
 import { mapActions } from 'vuex'
 import { SearchModel } from 'api/search'
 import { playlistMixin } from 'common/js/mixin'
+import cookies from 'js-cookie'
+import { constants } from 'crypto';
 
 const searchModel = new SearchModel()
-let totalnum = 0
+let TOTALNUM = 0
 
 export default {
   mixins: [playlistMixin],
@@ -43,7 +51,8 @@ export default {
       pullUpLoad: true,
       q: '',
       noMore: false,
-      page: 1
+      page: 1,
+      history:[]
     }
   },
   components: {
@@ -55,8 +64,20 @@ export default {
   created () {
     this.probeType = 3
     this.listenScroll = true
+    if(cookies.get('history')){
+      this.history = JSON.parse(cookies.get('history'))['history']
+    }
+  },
+  computed:{
+    getHistory(){
+      return this.history
+    },
+    showList(){
+      return this.results.length === 0
+    }
   },
   methods: {
+    
     toMv (song) {
       this.$router.push({
         path: `/mv/${song.title}`
@@ -70,7 +91,7 @@ export default {
     _getSearch (key) {
       searchModel.getSearch({ id: key }).then(res => {
         if (res.Code === 'OK') {
-          totalnum = res.songnum
+          TOTALNUM = res.songnum
           this.results = res.Body
         }
       })
@@ -91,18 +112,42 @@ export default {
         this.results = []
         return
       } else {
+        
         setTimeout(() => {
           this.$refs.shortcut.refresh()
         }, 20)
       }
-
-      this.q = encodeURI(v)
-      this._getSearch(this.q)
+      this.search(v)
+      
+    },
+    search(v){
+      this.addHistory(v)
+      this.q = v
+      this._getSearch(encodeURI(v))
+    },
+    selectHistory(v){
+      this.q = v
+    },
+    addHistory (v) {
+      const result = v.trim()
+      const obj = Object.create(null)
+      let index = this.history.indexOf(result)
+      if(index<0){ //如果历史记录里面没有
+        this.history.unshift(result)
+        if(this.history.length>8){
+          this.history.pop()
+        }
+      }else {//如果历史记录里面有
+        this.history.splice(index,1)
+        this.history.unshift(result)
+      }
+      obj['history'] = this.history
+      cookies.set('history', obj)
     },
     pullingUp () {
       let page = this.page++
       if (this.hasMore()) {
-        searchModel.getSearch({ id: this.q, page: page }).then(res => {
+        searchModel.getSearch({ id: encodeURI(this.q), page: page }).then(res => {
           if (res.Body) {
             this.setMoreData(res.Body)
           }
@@ -110,7 +155,7 @@ export default {
       }
     },
     hasMore () {
-      if (this.results.length >= totalnum) {
+      if (this.results.length >= TOTALNUM) {
         this.noMore = true
         return false
       } else {
@@ -127,9 +172,17 @@ export default {
 
 </script>
 <style lang='less' scoped>
-.search_box {
-  width: 90%;
-  margin: 0 auto;
+.search {
+  &_history{
+    margin-top: 0.1rem;
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  &_box {
+    width: 90%;
+    margin: 0 auto;
+  }
 }
 .shortcut-wrapper {
   position: fixed;
@@ -137,5 +190,28 @@ export default {
      overflow: hidden;
     width: 100%;
     height: 100%;
+}
+.history {
+
+  &_title{
+    padding: 0.1rem 0.05rem;
+    font-size: 0.14rem;
+  }
+  ul {
+    li {
+      display: inline-block;
+      padding: 0 0.05rem;
+      span{}
+    }
+  }
+  &_item{
+    padding: 0.02rem;
+    font-size: 0.12rem;
+    // border:1px solid #f2f2f2;
+    // border-radius: 4px;
+    line-height: 1.83em;
+    color: rgba(255, 255,255, 0.6)
+  }
+
 }
 </style>
