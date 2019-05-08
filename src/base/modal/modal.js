@@ -34,7 +34,7 @@ function getMessageInstance () {
   messageInstance = messageInstance || Modal.newInstance()
   return messageInstance
 }
-function notice ({ title = '', content = '' }) {
+function notice ({ title = '', content = '' } = {}) {
   // 等待接口调用的时候再实例化组件，避免进入页面就直接挂载到body上
   let instance = getMessageInstance()
   instance.add({

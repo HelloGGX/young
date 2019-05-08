@@ -1,39 +1,50 @@
 <template>
-  <div class="modal">
+<transition name="dialog">
+  <div class="modal" v-show="show"  @click.stop="handleClose">
     <div class="modal_main">
       <div class="modal_content">
         <div class="modal_header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" @click.stop="remove" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-          <h4 class="modal_title">标题</h4>
+          <h4 class="modal_title">{{title}}</h4>
         </div>
-        <div id="modalBody" class="modal_body">
-            <slot>
-                
-            </slot>
+        <div class="modal_body" v-html="content">
+            {{content}}
         </div>
       </div>
     </div>
   </div>
+  </transition>
 </template>
 
 <script type='text/ecmascript-6'>
 export default {
-  data() {
+  data () {
     return {
-      content: ""
-    };
+      content: '',
+      title: '',
+      show: false
+    }
   },
 
   methods: {
-    add(notice) {
-      this.content =  notice.content
-       
+    add (notice) {
+      this.content = notice.content
+      this.title = notice.title
+      this.show = true
     },
-    remove(name) {}
+    remove () {
+      this.show = false
+    },
+    handleClose (e) {
+      if (e.target.className !== 'modal') {
+        return
+      }
+      this.remove()
+    }
   }
-};
+}
 </script>
 <style lang='less' scoped>
 .modal {

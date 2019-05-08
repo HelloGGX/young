@@ -12,13 +12,13 @@
       </template>
     </navbar>
     <tab class="app_tab"></tab>
-     
+
     <transition name="slide">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
     </transition>
-    
+
     <player></player>
     <slide-left ref='slideLeft'></slide-left>
     <loading :show="isLoading"></loading>
@@ -46,7 +46,7 @@ export default {
         path: `/search/`
       })
     },
-    trigger(){
+    trigger () {
       this.$refs.slideLeft.show()
     }
   },

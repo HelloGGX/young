@@ -140,9 +140,9 @@ import ProgressCircle from 'base/progress-circle/progress-circle'
 import Lyric from 'lyric-parser'
 import AddSong from 'components/add-song/add-song'
 import Star from 'base/star/Star'
-import star_line from 'common/images/star.png'
-import star_fill from 'common/images/star_fill.png'
-import Modal from "base/modal/modal.js"
+import starLine from 'common/images/star.png'
+import starFill from 'common/images/star_fill.png'
+import Modal from 'base/modal/modal.js'
 
 const songModel = new SongModel()
 
@@ -166,8 +166,8 @@ export default {
     }
   },
   computed: {
-    getStarImg(){
-      return this.starInit? star_fill: star_line
+    getStarImg () {
+      return this.starInit ? starFill : starLine
     },
     showAddSong () {
       return this.playlist.length !== 0 && this.showLists
@@ -396,9 +396,11 @@ export default {
       }
       return num
     },
-    selectDownload(currentSong){
-      const template = `<div class="slot"><h3>hahah</h3></div>`
-      Modal.info({content: template})
+    selectDownload (currentSong) {
+      const template = `<div class="slot">
+        
+      </div>`
+      Modal.info({ content: template, title: '下载到歌单' })
     },
     ...mapMutations({
       setPlaylist: 'SET_PLAYLIST',
