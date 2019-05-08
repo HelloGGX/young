@@ -51,15 +51,15 @@
           <div class="operators operators__top" v-show="!lyricMode">
 
             <div class="icon">
-              <star class="operators_star" v-model="starInit"  :color="starColor">
-                 <i slot="icon" class="iconfont i-shoucang1"></i>
+              <star class="star operators_star" v-model="starInit"  :color="starColor">
+                <img class="star_img" slot="icon" :src="getStarImg" alt="">
               </star>
             </div>
             <div class="icon" @click.stop="toMv(currentSong)">
               <i class="iconfont i-bofang"></i>
             </div>
             <div class="icon">
-              <a :href="currentSong.url" :download="currentSong.title">
+              <a @click="selectDownload(currentSong)"  :download="currentSong.title">
                 <i class="iconfont i-xiazai"></i>
               </a>
             </div>
@@ -140,6 +140,10 @@ import ProgressCircle from 'base/progress-circle/progress-circle'
 import Lyric from 'lyric-parser'
 import AddSong from 'components/add-song/add-song'
 import Star from 'base/star/Star'
+import star_line from 'common/images/star.png'
+import star_fill from 'common/images/star_fill.png'
+import Modal from "base/modal/modal.js"
+
 const songModel = new SongModel()
 
 export default {
@@ -162,6 +166,9 @@ export default {
     }
   },
   computed: {
+    getStarImg(){
+      return this.starInit? star_fill: star_line
+    },
     showAddSong () {
       return this.playlist.length !== 0 && this.showLists
     },
@@ -388,6 +395,10 @@ export default {
         len++
       }
       return num
+    },
+    selectDownload(currentSong){
+      const template = `<div class="slot"><h3>hahah</h3></div>`
+      Modal.info({content: template})
     },
     ...mapMutations({
       setPlaylist: 'SET_PLAYLIST',
@@ -712,11 +723,9 @@ export default {
     }
   }
 }
-.wave {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
-  top: 0;
+.star {
+  &_img {
+    width: 0.24rem;
+  }
 }
 </style>
