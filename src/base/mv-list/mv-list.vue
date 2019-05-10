@@ -59,6 +59,8 @@ export default {
 
 </script>
 <style lang='less' scoped>
+@import "~@/common/less/variable.less";
+
 .mv_lists {
   top:1rem;
   ul li{
@@ -95,7 +97,7 @@ export default {
         width: 80%;
         padding: 0 0.1rem;
         line-height: 0.4rem;
-        font-size: 0.14rem;
+        font-size: @font-size-medium;
         p {
 overflow: hidden;text-overflow: ellipsis; white-space: nowrap;
         }
@@ -110,9 +112,9 @@ overflow: hidden;text-overflow: ellipsis; white-space: nowrap;
         line-height: 0.2rem;
         display: flex;
         justify-content: space-between;
-        font-size: 14px;
+        font-size: @font-size-medium;
         i {
-            font-size: 12px;
+            font-size: @font-size-small;
             margin-right: 0.05rem;
         }
         .mv_playcount {

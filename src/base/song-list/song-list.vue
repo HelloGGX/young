@@ -83,14 +83,14 @@ export default {
 }
 .song-list_name {
  line-height: 0.3rem;
- font-size: 0.14rem;
+ font-size: @font-size-medium;
  overflow: hidden;
  text-overflow: ellipsis;
  white-space: nowrap;
  width: 100%;
 }
 .song-list_desc {
-  font-size: 0.12rem;
+  font-size: @font-size-small ;
 
   color: @color-text-ll
 }

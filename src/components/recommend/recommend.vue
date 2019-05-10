@@ -105,7 +105,7 @@ export default {
     padding: 0 0.12rem 0;
     overflow: hidden;
     .list-title {
-        font-size: 0.16rem;
+        font-size: @font-size-medium-x;
         color: @color-theme-txt;
         line-height: 0.45rem;
         &:after {
@@ -126,7 +126,7 @@ export default {
         width: 30%;
         display: inline-block;
         margin-bottom: 0.1rem;
-        font-size: 0.14rem;
+        font-size: @font-size-medium;
 
         .icon {
           margin-bottom: 0.1rem;
@@ -159,7 +159,7 @@ export default {
           width: 40%;
           display: inline-block;
           margin-bottom: 0.1rem;
-          font-size: 0.14rem;
+          font-size: @font-size-medium;
           .bg-image('cd');
           background-position: 8px -1px;
           padding: 0.18rem 0.28rem 0 0;

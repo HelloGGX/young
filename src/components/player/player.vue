@@ -552,7 +552,7 @@ export default {
           .text {
             line-height: 0.32rem;
             color: @color-text-l;
-            font-size: 0.14rem;
+            font-size: @font-size-medium;
             &.current {
               color: @color-text;
             }
@@ -704,12 +704,12 @@ export default {
       .icon-play-mini,
       .icon-pause-mini,
       .icon-playlist {
-        font-size: 30px;
+        font-size: 0.3rem;
         color:rgba(255, 255, 255, 0.6)
       }
 
       .icon-mini {
-        font-size: 32px;
+        font-size: 0.32rem;
         position: absolute;
         left: 0;
         top: 0;

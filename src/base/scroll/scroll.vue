@@ -284,6 +284,8 @@ export default {
 </script>
 
 <style lang="less">
+@import "~@/common/less/variable.less";
+
 .list-wrapper {
     position: relative;
     height: 100%;
@@ -297,7 +299,7 @@ export default {
       .list-item {
         height: 60px;
         line-height: 60px;
-        font-size: 18px;
+        font-size: @font-size-large;
         padding-left: 20px;
         border-bottom: 1px solid #e5e5e5;
       }

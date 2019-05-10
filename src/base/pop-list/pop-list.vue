@@ -101,7 +101,7 @@ export default {
      &:before {
        font-family: "iconfont" !important;
        content: '\e654';
-       font-size: 0.14rem;
+       font-size: @font-size-medium;
        color: @color-theme;
        padding: 0 0.05rem;
      }
@@ -123,12 +123,12 @@ export default {
   margin-left: auto;
   color: #666;
   .song-list_delete {
-    font-size: 0.18rem;
+    font-size: @font-size-large;
   }
 }
 .song-list_name {
  line-height: 0.3rem;
- font-size: 0.14rem;
+ font-size: @font-size-medium;
 
  color: #000;
  &::after {
@@ -138,7 +138,7 @@ export default {
  }
 }
 .song-list_desc {
-  font-size: 0.12rem;
+  font-size: @font-size-small;
   color: #666;
 }
 </style>

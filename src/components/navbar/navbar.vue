@@ -47,7 +47,7 @@ export default {
 @import '~@/common/less/variable.less';
 
 .header {
-    font-size: 0.18rem;
+    font-size: @font-size-large;
     .header-items {
       height: .7rem;
       display: -webkit-box;
@@ -83,7 +83,7 @@ export default {
         h3 {
           color: #fff;
           line-height: 0.5rem;
-          font-size: 0.16rem;
+          font-size: @font-size-medium-x;
         }
       }
     }

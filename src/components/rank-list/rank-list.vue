@@ -115,13 +115,13 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
-      font-size: 0.12rem;
+      font-size: @font-size-small;
       color: rgba(250, 250, 250, 0.5);
       line-height: 0.2rem;
     }
   }
   &_tit {
-    font-size: 0.14rem;
+    font-size: @font-size-medium;
     color: #ffffff;
     font-weight: 400;
     margin-bottom: 5px;

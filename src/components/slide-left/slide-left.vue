@@ -50,7 +50,7 @@ export default {
         padding: 0.6rem 0.2rem 0;
         background-color: #f2f2f2;
         p{
-            font-size: 0.16rem;
+            font-size: @font-size-medium-x ;
             color: #666666;
             line-height: 0.4rem;
         }
@@ -76,7 +76,7 @@ export default {
     }
     &_txt{
         margin-left: 0.05rem;
-        font-size: 0.14rem;
+        font-size: @font-size-medium;
         color: #666666;
     }
 }

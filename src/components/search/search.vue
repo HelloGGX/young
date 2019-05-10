@@ -169,6 +169,7 @@ export default {
 
 </script>
 <style lang='less' scoped>
+@import "~@/common/less/variable.less";
 .search {
   &_history{
     margin-top: 0.1rem;
@@ -192,7 +193,7 @@ export default {
 
   &_title{
     padding: 0.1rem 0.05rem;
-    font-size: 0.14rem;
+    font-size: @font-size-medium;
   }
   ul {
     li {
@@ -203,7 +204,7 @@ export default {
   }
   &_item{
     padding: 0.02rem;
-    font-size: 0.12rem;
+    font-size: @font-size-small;
     // border:1px solid #f2f2f2;
     // border-radius: 4px;
     line-height: 1.83em;

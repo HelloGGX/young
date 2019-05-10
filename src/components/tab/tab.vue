@@ -23,9 +23,9 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-
+@import "~@/common/less/variable.less";
 .tab {
-  font-size: 0.16rem;
+  font-size: @font-size-medium-x ;
 
   .tab-items {
     position: relative;

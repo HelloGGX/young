@@ -47,6 +47,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
+@import "~@/common/less/variable.less";
 .modal {
   position: fixed;
   top: 0;
@@ -69,7 +70,7 @@ export default {
     display: inline-block;
     vertical-align: middle;
     text-align: left;
-    font-size: 14px;
+    font-size: @font-size-medium;
     white-space: normal;
   }
   &_content {
@@ -106,7 +107,7 @@ export default {
   }
   &_title {
     margin: 0;
-    font-size: 0.14rem;
+    font-size: @font-size-medium;
     color: #666;
   }
   &_body {

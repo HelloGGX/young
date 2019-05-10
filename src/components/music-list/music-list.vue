@@ -239,11 +239,11 @@ export default {
     line-height: 0.2rem;
     font-weight: 200;
     h3 {
-      font-size: 0.14rem;
+      font-size: @font-size-medium ;
       line-height: 0.3rem;
     }
     p {
-      font-size: 0.12rem;
+      font-size: @font-size-small;
     }
   }
   .list {
