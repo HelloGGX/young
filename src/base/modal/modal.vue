@@ -1,118 +1,172 @@
 <template>
-<transition name="dialog">
-  <div class="modal" v-show="show"  @click.stop="handleClose">
-    <div class="modal_main">
-      <div class="modal_content">
-        <div class="modal_header">
-          <button type="button" @click.stop="remove" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-          <h4 class="modal_title">{{title}}</h4>
-        </div>
-        <div class="modal_body" v-html="content">
-            {{content}}
-        </div>
+<div class="modal" :style="{'z-index': zIndex}" :class="rootClass" v-show="isVisible">
+    <div class="modal-mask" @touchmove.prevent @click="maskClick">
+      <slot name="mask"></slot>
+    </div>
+    <div class="modal-container" @touchmove.prevent :class="containerClass">
+      <div class="modal-content" v-if="$slots.default">
+        <slot></slot>
+      </div>
+      <div class="modal-content" v-else v-html="content">
       </div>
     </div>
   </div>
-  </transition>
 </template>
 
 <script type='text/ecmascript-6'>
-export default {
-  data () {
-    return {
-      content: '',
-      title: '',
-      show: false
-    }
-  },
+import visibilityMixin from 'common/js/mixin/visibility'
+import popupMixin from 'common/js/mixin/modal'
 
-  methods: {
-    add (notice) {
-      this.content = notice.content
-      this.title = notice.title
-      this.show = true
-    },
-    remove () {
-      this.show = false
-    },
-    handleClose (e) {
-      if (e.target.className !== 'modal') {
-        return
+const COMPONENT_NAME = 'modal'
+const EVENT_MASK_CLICK = 'mask_click'
+
+
+export default {
+  name: COMPONENT_NAME,
+  mixins: [visibilityMixin, popupMixin],
+  props: {
+      type: {
+        type: String,
+        default: ''
+      },
+      mask: {
+        type: Boolean,
+        default: true
+      },
+      content: {
+        type: String,
+        default: ''
+      },
+      center: {
+        type: Boolean,
+        default: true
+      },
+      position: {
+        type: String,
+        default: ''
       }
-      this.remove()
+    },
+computed: {
+      rootClass() {
+        const cls = {
+          'modal_mask': this.mask
+        }
+        if (this.type) {
+          cls[`modal_${this.type}`] = true
+        }
+        return cls
+      },
+      containerClass() {
+        const center = this.center
+        const position = this.position
+        if (position) {
+          return {
+            [`modal-${position}`]: true
+          }
+        }
+        if (center) {
+          return {
+            'modal-center': true
+          }
+        }
+      }
+    },
+  methods: {
+      maskClick(e) {
+        this.$emit(EVENT_MASK_CLICK, e)
+        if (this.maskClosable) {
+          this.hide()
+        }
+      }
     }
-  }
 }
 </script>
 <style lang='less' scoped>
 @import "~@/common/less/variable.less";
 .modal {
   position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  text-align: center;
-  font-size: 0;
-  white-space: nowrap;
-  overflow: auto;
-  z-index: 3;
-  &::after {
-    content: "";
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-  }
-  &_main {
-    display: inline-block;
-    vertical-align: middle;
-    text-align: left;
-    font-size: @font-size-medium;
-    white-space: normal;
-  }
-  &_content {
-    position: relative;
-    background-color: #fff;
-    -webkit-background-clip: padding-box;
-    background-clip: padding-box;
-    border: 1px solid #999;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 6px;
-    outline: 0;
-    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
-  }
-  &_header {
-    padding: 15px;
-    border-bottom: 1px solid #e5e5e5;
-    .close {
-      margin-top: -2px;
-      -webkit-appearance: none;
-      padding: 0;
-      cursor: pointer;
-      background: 0 0;
-      border: 0;
-      float: right;
-      font-size: 21px;
-      font-weight: 700;
-      line-height: 1;
-      color: #000;
-      text-shadow: 0 1px 0 #fff;
-      filter: alpha(opacity=20);
-      opacity: 0.2;
+    left: 0;
+    right:0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    pointer-events: none;
+    &_mask {
+      pointer-events: auto;
+      .modal-mask {
+        display: block;
+      }
     }
-  }
-  &_title {
-    margin: 0;
-    font-size: @font-size-medium;
-    color: #666;
-  }
-  &_body {
-    position: relative;
-    padding: 15px;
-  }
+    &-mask, &-container{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    &-mask {
+      display: none;
+      overflow: hidden;
+      background-color: @color-dialog-background;
+      opacity: @modal-mask-opacity;
+      pointer-events: auto;
+    // fix some android webview opacity render bug
+      &::before{
+        content: ".";
+        display: block;
+        width: 1px;
+        height: 1px;
+        background-color: rgba(0, 0, 0, .1);
+        margin-left: -10px;
+      } 
+    }
+    &-container{
+       transform: translate(100%, 100%)
+    }
+    &-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      box-sizing: border-box;
+      transform: translate(-100%, -100%);
+      pointer-events: auto;
+    }
+    &-center,&-right,&-left{
+      .modal-content {
+        top: -50%;
+        left: -50%;
+        width: auto;
+        max-width: 100%;
+        transform: translate(0, 0);
+      }
+    }
+    &-right,&-left{
+       .modal-content{
+        height: 100%;
+        top: -100%;
+       }
+    }
+    &-center{
+      .modal-content{
+        transform: translate(-50%, -50%)
+      }
+    }
+    &-top{
+      .modal-content{
+        top: -100%;
+        left: -100%;
+        transform: translate(0, 0);
+      }
+    }
+    &-right{
+      .modal-content{
+        top: -100%;
+        ight: 100%;
+      }
+    }
+    &-left{
+      .modal-content{
+        left: -100%
+      }
+    }
 }
 </style>

@@ -33,7 +33,7 @@ import SongList from 'base/song-list/song-list'
 import Scroll from 'base/scroll/scroll'
 import { mapActions } from 'vuex'
 import { SearchModel } from 'api/search'
-import { playlistMixin } from 'common/js/mixin'
+import { playlistMixin } from 'common/js/mixin/playlist'
 import cookies from 'js-cookie'
 
 const searchModel = new SearchModel()

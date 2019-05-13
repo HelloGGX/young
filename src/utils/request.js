@@ -156,6 +156,7 @@ class HTTP {
   /**
     * GET类型的网络请求
    **/
+
   get (url, data) {
     // data是对象
     return this.handleRequest(
@@ -164,6 +165,14 @@ class HTTP {
         showLoading: true
       })
     )
+  }
+  getAll (url, data) {
+    let obj = { ...data }
+    let array = []
+    for (let key in obj) {
+      array.push(this.get(url, obj[key]))
+    }
+    return this.handleAll(array)
   }
   /**
     * POST类型的网络请求
