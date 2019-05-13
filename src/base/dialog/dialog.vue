@@ -25,7 +25,7 @@
           </h2>
           <div class="dialog-content">
             <slot name="content">
-              <div class="dialog-content-def" v-html="content" v-if="content"></div>
+              <div class="dialog-content-def" v-html="content" v-if="content" @click="contentClick"></div>
             </slot>
           </div>
           <div class="dialog-btns" :class="{'border-right-1px': isConfirm}">
@@ -52,56 +52,57 @@
 </template>
 
 <script type='text/ecmascript-6'>
-import Modal from "../modal/modal";
-import popupMixin from "common/js/mixin/modal";
-import visibilityMixin from "common/js/mixin/visibility";
+import Modal from '../modal/modal'
+import popupMixin from 'common/js/mixin/modal'
+import visibilityMixin from 'common/js/mixin/visibility'
 
-const COMPONENT_NAME = "Dialog";
-const EVENT_CONFIRM = "confirm";
-const EVENT_CANCEL = "cancel";
-const EVENT_CLOSE = "close";
+const COMPONENT_NAME = 'Dialog'
+const EVENT_CONFIRM = 'confirm'
+const EVENT_CANCEL = 'cancel'
+const EVENT_CLOSE = 'close'
+const EVENT_CLICK = 'click'
 
-const defHref = "javascript:;";
+const defHref = 'javascript:;'
 const defConfirmBtn = {
-  textType: "ok",
+  textType: 'ok',
   active: true,
   disabled: false,
   href: defHref
-};
+}
 const defCancelBtn = {
-  textType: "cancel",
+  textType: 'cancel',
   active: false,
   disabled: false,
   href: defHref
-};
-const parseBtn = function(btn, defBtn) {
-  if (typeof btn === "string") {
+}
+const parseBtn = function (btn, defBtn) {
+  if (typeof btn === 'string') {
     btn = {
       text: btn
-    };
+    }
   }
-  const text = defBtn && defBtn.textType;
-  return Object.assign({}, defBtn, { text }, btn);
-};
+  const text = defBtn && defBtn.textType
+  return Object.assign({}, defBtn, { text }, btn)
+}
 export default {
   name: COMPONENT_NAME,
   mixins: [visibilityMixin, popupMixin],
   props: {
     type: {
       type: String,
-      default: "alert"
+      default: 'alert'
     },
     icon: {
       type: String,
-      default: ""
+      default: ''
     },
     title: {
       type: String,
-      default: ""
+      default: ''
     },
     content: {
       type: String,
-      default: ""
+      default: ''
     },
     showClose: {
       type: Boolean,
@@ -109,70 +110,73 @@ export default {
     },
     confirmBtn: {
       type: [Object, String],
-      default() {
+      default () {
         return {
           ...defConfirmBtn
-        };
+        }
       }
     },
     cancelBtn: {
       type: [Object, String],
-      default() {
+      default () {
         return {
           ...defCancelBtn
-        };
+        }
       }
     }
   },
-  data() {
+  data () {
     return {
       defHref
-    };
+    }
   },
   computed: {
-    _confirmBtn() {
-      return parseBtn.call(this, this.confirmBtn, defConfirmBtn);
+    _confirmBtn () {
+      return parseBtn.call(this, this.confirmBtn, defConfirmBtn)
     },
-    _cancelBtn() {
-      return parseBtn.call(this, this.cancelBtn, defCancelBtn);
+    _cancelBtn () {
+      return parseBtn.call(this, this.cancelBtn, defCancelBtn)
     },
-    isConfirm() {
-      return this.type === "confirm";
+    isConfirm () {
+      return this.type === 'confirm'
     },
-    containerClass() {
-      return `dialog-${this.type}`;
+    containerClass () {
+      return `dialog-${this.type}`
     }
   },
   methods: {
-    maskClick(e) {
-      this.maskClosable && this.cancel(e);
+    maskClick (e) {
+      this.maskClosable && this.cancel(e)
     },
-    confirm(e) {
+    confirm (e) {
       if (this._confirmBtn.disabled) {
-        return;
+        return
       }
-      this.hide();
-      this.$emit(EVENT_CONFIRM, e);
+      this.hide()
+      this.$emit(EVENT_CONFIRM, e)
     },
-    cancel(e) {
+    cancel (e) {
       if (this._cancelBtn.disabled) {
-        return;
+        return
       }
-      this.hide();
-      this.$emit(EVENT_CANCEL, e);
+      this.hide()
+      this.$emit(EVENT_CANCEL, e)
     },
-    close(e) {
-      this.hide();
-      this.$emit(EVENT_CLOSE, e);
+    close (e) {
+      this.hide()
+      this.$emit(EVENT_CLOSE, e)
+    },
+    contentClick (e) {
+      this.$emit(EVENT_CLICK, e)
     }
   },
   components: {
     Modal
   }
-};
+}
 </script>
 
-<style lang='less' scoped>
+<style lang='less'>
 @import "~@/common/less/variable.less";
 .dialog{
     &-main {
@@ -181,7 +185,7 @@ export default {
         text-align: center;
         overflow: hidden;
         border-radius: 2px;
-        background-color: #ffffff;
+        background-color:#383838;
     }
      &-confirm, &-alert{
         position: relative;
@@ -200,7 +204,7 @@ export default {
             padding: 10px;
             box-sizing: content-box;
             border-radius: 50%;
-            background-color: #f3f4f5;  
+            background-color: #f3f4f5;
         }
         &+.dialog-title {
             .dialog-title-def {
@@ -236,7 +240,7 @@ export default {
         >p {
            display: table;
            margin: auto ;
-        } 
+        }
      }
      &-confirm, &-prompt {
         .dialog-btns {
@@ -250,7 +254,7 @@ export default {
                     }
                 }
             }
-        } 
+        }
      }
      &-close{
         display: flex;
@@ -268,7 +272,7 @@ export default {
      &-btns {
         overflow: hidden;
         width: 100%;
-        font-size: 0;   
+        font-size: 0;
      }
      &-btn {
         display: inline-block;
@@ -280,7 +284,7 @@ export default {
         text-align: center;
         text-decoration: none;
         color: #999999;
-        background-color: #ffffff;
+        background-color: #383838;
         background-clip: padding-box;
         box-sizing: border-box;
         &:active {
@@ -288,7 +292,7 @@ export default {
         }
      }
      &-btn_highlight {
-          color: #666666;
+          color: #ffffff;
           &:active {
              background-color: #333333
           }
@@ -298,7 +302,7 @@ export default {
          &:active {
              background-color: #333333
          }
-      
+
      }
 }
 
@@ -332,4 +336,5 @@ export default {
     transform: scale(1);
   }
 }
+
 </style>

@@ -2,17 +2,43 @@
 <template>
   <div class="player">
     <transition name="fade">
-      <div class="normal-player page" v-show="fullScreen">
-        <navbar :title="currentSong.title" @back="back"></navbar>
+      <div
+        class="normal-player page"
+        v-show="fullScreen"
+      >
+        <navbar
+          :title="currentSong.title"
+          @back="back"
+        ></navbar>
         <div class="normal-player_bg">
-          <img width="100%" height="100%" :src="currentSong.pic">
+          <img
+            width="100%"
+            height="100%"
+            :src="currentSong.pic"
+          >
         </div>
-        <div class="normal-player_middle" @click="toggleMode">
+        <div
+          class="normal-player_middle"
+          @click="toggleMode"
+        >
           <transition name="fade">
-            <div class="middle-l" ref="middleL" v-show="!lyricMode">
-              <div class="cd-wrapper" ref="cdWrapper">
-                <div class="cd" :class="cdCls">
-                  <img class="image" :src="currentSong.pic">
+            <div
+              class="middle-l"
+              ref="middleL"
+              v-show="!lyricMode"
+            >
+              <div
+                class="cd-wrapper"
+                ref="cdWrapper"
+              >
+                <div
+                  class="cd"
+                  :class="cdCls"
+                >
+                  <img
+                    class="image"
+                    :src="currentSong.pic"
+                  >
                 </div>
               </div>
               <div class="playing-lyric-wrapper">
@@ -20,7 +46,10 @@
                   class="playing-lyric playing-lyric__now"
                   v-if="currentLyric && currentLyric.lines.length>0"
                 >{{playingLyric}}</div>
-                <div class="playing-lyric playing-lyric__now" v-else>轻音乐,暂无歌词</div>
+                <div
+                  class="playing-lyric playing-lyric__now"
+                  v-else
+                >轻音乐,暂无歌词</div>
               </div>
             </div>
           </transition>
@@ -41,24 +70,45 @@
                   :key="index"
                 >{{line.txt}}</p>
               </div>
-              <div v-else class="lyric-wrapper_nolyric">
+              <div
+                v-else
+                class="lyric-wrapper_nolyric"
+              >
                 <p class="text">轻音乐暂无歌词</p>
               </div>
             </div>
           </scroll>
         </div>
         <div class="bottom">
-          <div class="operators operators__top" v-show="!lyricMode">
+          <div
+            class="operators operators__top"
+            v-show="!lyricMode"
+          >
             <div class="icon">
-              <star class="star operators_star" v-model="starInit" :color="starColor">
-                <img class="star_img" slot="icon" :src="getStarImg" alt>
+              <star
+                class="star operators_star"
+                v-model="starInit"
+                :color="starColor"
+              >
+                <img
+                  class="star_img"
+                  slot="icon"
+                  :src="getStarImg"
+                  alt
+                >
               </star>
             </div>
-            <div class="icon" @click.stop="toMv(currentSong)">
+            <div
+              class="icon"
+              @click.stop="toMv(currentSong)"
+            >
               <i class="iconfont i-bofang"></i>
             </div>
             <div class="icon">
-              <a @click="selectDownload(currentSong)" :download="currentSong.title">
+              <a
+                @click="selectDownload(currentSong)"
+                :download="currentSong.title"
+              >
                 <i class="iconfont i-xiazai"></i>
               </a>
             </div>
@@ -69,26 +119,50 @@
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
-              <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
+              <progress-bar
+                :percent="percent"
+                @percentChange="onProgressBarChange"
+              ></progress-bar>
             </div>
             <span class="time time-r">{{format(duration)}}</span>
           </div>
           <div class="operators operators__bottom">
-            <div class="icon" @click="changeMode">
-              <i class="iconfont" :class="iconMode"></i>
+            <div
+              class="icon"
+              @click="changeMode"
+            >
+              <i
+                class="iconfont"
+                :class="iconMode"
+              ></i>
             </div>
-            <div class="icon" @click="prev">
+            <div
+              class="icon"
+              @click="prev"
+            >
               <i class="iconfont i-zuobofang"></i>
             </div>
             <div class="icon">
-              <div class="operators_playbtn" @click="togglePlaying">
-                <i class="iconfont" :class="playIcon"></i>
+              <div
+                class="operators_playbtn"
+                @click="togglePlaying"
+              >
+                <i
+                  class="iconfont"
+                  :class="playIcon"
+                ></i>
               </div>
             </div>
-            <div class="icon" @click="next">
+            <div
+              class="icon"
+              @click="next"
+            >
               <i class="iconfont i-youbofang"></i>
             </div>
-            <div class="icon" @click.stop="show">
+            <div
+              class="icon"
+              @click.stop="show"
+            >
               <i class="iconfont i-menu-fold"></i>
             </div>
           </div>
@@ -96,20 +170,45 @@
       </div>
     </transition>
     <transition name="fade">
-      <div class="mini-player" v-show="!fullScreen && miniShow" @click="open">
+      <div
+        class="mini-player"
+        v-show="!fullScreen && miniShow"
+        @click="open"
+      >
         <div class="icon">
-          <img :class="cdCls" width="40" height="40" :src="currentSong.pic">
+          <img
+            :class="cdCls"
+            width="40"
+            height="40"
+            :src="currentSong.pic"
+          >
         </div>
         <div class="text">
-          <h2 class="name" v-html="currentSong.title"></h2>
-          <p class="desc" v-html="currentSong.author"></p>
+          <h2
+            class="name"
+            v-html="currentSong.title"
+          ></h2>
+          <p
+            class="desc"
+            v-html="currentSong.author"
+          ></p>
         </div>
         <div class="control">
-          <progress-circle :radius="radius" :percent="percent">
-            <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
+          <progress-circle
+            :radius="radius"
+            :percent="percent"
+          >
+            <i
+              @click.stop="togglePlaying"
+              class="icon-mini"
+              :class="miniIcon"
+            ></i>
           </progress-circle>
         </div>
-        <div class="control" @click.stop="show">
+        <div
+          class="control"
+          @click.stop="show"
+        >
           <i class="icon-playlist"></i>
         </div>
       </div>
@@ -123,304 +222,319 @@
       @timeupdate="updateTime"
       @ended="end"
     ></audio>
-    <add-song :show="showAddSong" @showup="showup"></add-song>
+    <add-song
+      :show="showAddSong"
+      @showup="showup"
+    ></add-song>
   </div>
 </template>
 
 <script  type='text/ecmascript-6'>
-import Navbar from "components/navbar/navbar";
-import { SongModel } from "api/song";
-import { shuffle } from "lodash";
-import Scroll from "base/scroll/scroll";
-import { playMode } from "common/js/config";
-import { mapGetters, mapMutations } from "vuex";
-import ProgressBar from "base/progress-bar/progress-bar";
-import ProgressCircle from "base/progress-circle/progress-circle";
-import Lyric from "lyric-parser";
-import AddSong from "components/add-song/add-song";
-import Star from "base/star/Star";
-import starLine from "common/images/star.png";
-import starFill from "common/images/star_fill.png";
-import addDialog from "base/dialog/api.js";
-const songModel = new SongModel();
+import Navbar from 'components/navbar/navbar'
+import { SongModel } from 'api/song'
+import { shuffle } from 'lodash'
+import Scroll from 'base/scroll/scroll'
+import { playMode } from 'common/js/config'
+import { mapGetters, mapMutations } from 'vuex'
+import ProgressBar from 'base/progress-bar/progress-bar'
+import ProgressCircle from 'base/progress-circle/progress-circle'
+import Lyric from 'lyric-parser'
+import AddSong from 'components/add-song/add-song'
+import Star from 'base/star/Star'
+import starLine from 'common/images/star.png'
+import starFill from 'common/images/star_fill.png'
+import addDialog from 'base/dialog/api.js'
+import {downloadFile } from 'common/js/utils'
+import { addClass, removeClass, hasClass } from 'common/js/dom'
+
+const songModel = new SongModel()
 
 export default {
-  data() {
+  data () {
     return {
       songReady: false,
       currentTime: 0,
-      playingLyric: "",
+      playingLyric: '',
       radius: 32,
       currentLineNum: 0,
-      currentShow: "cd",
-      duration: "",
+      currentShow: 'cd',
+      duration: '',
       lyricMode: false,
       currentLyric: null,
       showLists: false, // 判断正在播放的底部弹层列表的显示和隐藏
       miniShow: true,
-      songUrl: "",
-      songAllUrl:[],
+      songUrl: '',
+      songAllUrl: [],
       starInit: false,
-      starColor: "rgb(240,86,84)"
-    };
+      starColor: 'rgb(240,86,84)'
+    }
   },
   computed: {
-    getStarImg() {
-      return this.starInit ? starFill : starLine;
+    getDownLists () {
+      let len = this.songAllUrl.length
+      let temp = ''
+      const obj = { 0: '标清品质', 1: '高清品质', 2: '无损品质', 3: '超级无损品质' }
+      for (let i = 0; i < len; i++) {
+        temp += `<li class="url-lists_item" data-href="${this.songAllUrl[i].url}">
+          <a >${obj[i]}</a>
+        </li>`
+      }
+      return `<div class="url-lists">
+          <ul>
+           ${temp}
+          </ul>
+      </div>`
     },
-    showAddSong() {
-      return this.playlist.length !== 0 && this.showLists;
+    getStarImg () {
+      return this.starInit ? starFill : starLine
     },
-    playIcon() {
-      return this.playing ? "i-zanting" : "i-bofang";
+    showAddSong () {
+      return this.playlist.length !== 0 && this.showLists
     },
-    iconMode() {
+    playIcon () {
+      return this.playing ? 'i-zanting' : 'i-bofang'
+    },
+    iconMode () {
       return this.mode === playMode.sequence
-        ? "i-yuanxunhuanbofang"
+        ? 'i-yuanxunhuanbofang'
         : this.mode === playMode.loop
-        ? "i-danquxunhuan"
-        : "i-suijibofang";
+          ? 'i-danquxunhuan'
+          : 'i-suijibofang'
     },
-    miniIcon() {
-      return this.playing ? "icon-pause-mini" : "icon-play-mini";
+    miniIcon () {
+      return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
     },
-    percent() {
-      return this.currentTime / this.duration;
+    percent () {
+      return this.currentTime / this.duration
     },
-    cdCls() {
-      return this.playing ? "play" : "play pause";
+    cdCls () {
+      return this.playing ? 'play' : 'play pause'
     },
-    songSrc() {
-      return this.songUrl !== "" ? this.songUrl : this.currentSong.url;
+    songSrc () {
+      return this.songUrl !== '' ? this.songUrl : this.currentSong.url
     },
     ...mapGetters([
-      "sequenceList",
-      "playlist",
-      "currentSong",
-      "mode",
-      "favoriteList",
-      "currentIndex",
-      "fullScreen",
-      "playing"
+      'sequenceList',
+      'playlist',
+      'currentSong',
+      'mode',
+      'favoriteList',
+      'currentIndex',
+      'fullScreen',
+      'playing'
     ])
   },
-  created() {
-    this.current = { duration: 0 };
-    addDialog();
+  created () {
+    this.current = { duration: 0 }
+    addDialog()
   },
   methods: {
-    toMv(song) {
+    toMv (song) {
       this.$router.push({
         path: `/mv/${song.title}`
-      });
-      this.back();
+      })
+      this.back()
     },
-    showup(v) {
-      this.showLists = v;
+    showup (v) {
+      this.showLists = v
     },
-    show() {
-      this.showLists = true;
+    show () {
+      this.showLists = true
     },
-    back() {
-      this.setFullScreen(false);
+    back () {
+      this.setFullScreen(false)
     },
-    open() {
-      this.setFullScreen(true);
+    open () {
+      this.setFullScreen(true)
     },
-    toggleMode() {
-      this.lyricMode = !this.lyricMode;
+    toggleMode () {
+      this.lyricMode = !this.lyricMode
     },
-    togglePlaying() {
+    togglePlaying () {
       if (!this.songReady) {
-        return;
+        return
       }
-      this.setPlayingState(!this.playing);
+      this.setPlayingState(!this.playing)
 
       if (this.currentLyric) {
-        this.currentLyric.togglePlay();
+        this.currentLyric.togglePlay()
       }
     },
-    changeMode() {
-      const mode = (this.mode + 1) % 3;
+    changeMode () {
+      const mode = (this.mode + 1) % 3
 
-      this.setPlayMode(mode);
-      let list = null;
+      this.setPlayMode(mode)
+      let list = null
       if (mode === playMode.random) {
-        list = shuffle(this.sequenceList);
+        list = shuffle(this.sequenceList)
       } else {
-        list = this.sequenceList;
+        list = this.sequenceList
       }
-      this.resetCurrentIndex(list);
-      this.setPlaylist(list);
+      this.resetCurrentIndex(list)
+      this.setPlaylist(list)
     },
-    resetCurrentIndex(list) {
+    resetCurrentIndex (list) {
       let index = list.findIndex(item => {
-        return item.mid === this.currentSong.mid;
-      });
-      this.setCurrentIndex(index);
+        return item.mid === this.currentSong.mid
+      })
+      this.setCurrentIndex(index)
     },
-    onProgressBarChange(percent) {
+    onProgressBarChange (percent) {
       if (!this.duration) {
-        return;
+        return
       }
-      const currentTime = this.duration * percent;
-      this.$refs.audio.currentTime = currentTime;
+      const currentTime = this.duration * percent
+      this.$refs.audio.currentTime = currentTime
       if (!this.playing) {
-        this.togglePlaying();
+        this.togglePlaying()
       }
       if (this.currentLyric) {
-        this.currentLyric.seek(currentTime * 1000);
+        this.currentLyric.seek(currentTime * 1000)
       }
     },
-    getLyric() {
+    getLyric () {
       songModel
         .getLyric({ id: this.currentSong.mid })
         .then(lyric => {
-          this.currentLyric = new Lyric(lyric, this.handleLyric);
+          this.currentLyric = new Lyric(lyric, this.handleLyric)
           if (this.playing) {
-            this.currentLyric.play();
+            this.currentLyric.play()
           }
         })
         .catch(() => {
-          this.currentLyric = null;
-          this.playingLyric = "";
-          this.currentLineNum = 0;
-        });
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
+        })
     },
-    _getSongUrl(id) {
+    _getSongUrl (id) {
       songModel
         .getSongUrl({ id: id })
         .then(res => {
-          this.songUrl = res.url;
+          this.songUrl = res.url
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
-    _getSongAllUrl(id){
-      songModel.getSongAllUrl({id:id}).then(res=>{
+    _getSongAllUrl (id) {
+      return songModel.getSongAllUrl({ id: id }).then(res => {
         this.songAllUrl = res
+        return new Promise((resolve, reject) => {
+          resolve(res)
+        })
+      }).catch(err => {
+        console.log(err)
       })
-      .catch(err => {
-          console.log(err);
-        });
     },
-    handleLyric({ lineNum, txt }) {
-      this.currentLineNum = lineNum;
+    handleLyric ({ lineNum, txt }) {
+      this.currentLineNum = lineNum
       // console.log(this.$refs.lyricList)
       if (lineNum > 5) {
         this.$nextTick(() => {
-          let lineEl = this.$refs.lyricLine[lineNum - 5];
-          this.$refs.lyricList.scrollToElement(lineEl, 1000);
-        });
+          let lineEl = this.$refs.lyricLine[lineNum - 5]
+          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+        })
       } else {
-        this.$refs.lyricList.scrollTo(0, 0, 1000);
+        this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
-      this.playingLyric = txt;
+      this.playingLyric = txt
     },
-    canpaly() {
+    canpaly () {
       // 解决audio获取到播放地址后，能获取duration的问题
-      const totalTime = this.$refs.audio.duration;
-      this.duration = totalTime;
+      const totalTime = this.$refs.audio.duration
+      this.duration = totalTime
     },
-    ready() {
-      this.songReady = true;
+    ready () {
+      this.songReady = true
     },
-    error() {
-      this.songReady = true;
+    error () {
+      this.songReady = true
     },
-    updateTime(e) {
-      this.currentTime = e.target.currentTime;
+    updateTime (e) {
+      this.currentTime = e.target.currentTime
     },
-    end() {
+    end () {
       if (this.mode === playMode.loop) {
-        this.loop();
+        this.loop()
       } else {
-        this.next();
+        this.next()
       }
     },
-    next() {
+    next () {
       if (!this.songReady) {
-        return;
+        return
       }
       if (this.playlist.length === 1) {
         // 如果列表只有一首歌
-        this.loop();
+        this.loop()
       } else {
         if (this.mode === playMode.loop) {
-          this.loop();
-          return;
+          this.loop()
+          return
         }
-        let index = this.currentIndex + 1;
+        let index = this.currentIndex + 1
         if (index === this.playlist.length) {
           // 如果已经到了最后一首歌
-          index = 0;
+          index = 0
         }
-        this.setCurrentIndex(index);
+        this.setCurrentIndex(index)
         if (!this.playing) {
-          this.togglePlaying();
+          this.togglePlaying()
         }
       }
     },
-    prev() {
+    prev () {
       if (!this.songReady) {
-        return;
+        return
       }
       if (this.playlist.length === 1) {
         // 如果列表只有一首歌
-        this.loop();
+        this.loop()
       } else {
         if (this.mode === playMode.loop) {
-          this.loop();
-          return;
+          this.loop()
+          return
         }
-        let index = this.currentIndex - 1;
+        let index = this.currentIndex - 1
         if (index === -1) {
           // 如果第一首歌
-          index = this.playlist.length - 1;
+          index = this.playlist.length - 1
         }
-        this.setCurrentIndex(index);
+        this.setCurrentIndex(index)
         if (!this.playing) {
-          this.togglePlaying();
+          this.togglePlaying()
         }
       }
     },
-    loop() {
-      this.$refs.audio.currentTime = 0;
-      this.$refs.audio.play();
-      this.setPlayingState(true);
+    loop () {
+      this.$refs.audio.currentTime = 0
+      this.$refs.audio.play()
+      this.setPlayingState(true)
       if (this.currentLyric) {
-        this.currentLyric.seek(0);
+        this.currentLyric.seek(0)
       }
     },
-    format(interval) {
-      interval = interval | 0;
-      const minute = (interval / 60) | 0;
-      const second = this._pad(interval % 60);
-      return `${minute}:${second}`;
+    format (interval) {
+      interval = interval | 0
+      const minute = (interval / 60) | 0
+      const second = this._pad(interval % 60)
+      return `${minute}:${second}`
     },
-    _pad(num, n = 2) {
-      let len = num.toString().length;
+    _pad (num, n = 2) {
+      let len = num.toString().length
       while (len < n) {
-        num = "0" + num;
-        len++;
+        num = '0' + num
+        len++
       }
-      return num;
+      return num
     },
-    selectDownload(currentSong) {
-      this._getSongAllUrl(currentSong.mid)
-      const template = `<div class="url-lists">
-          
-      </div>`;
-      // Modal.info({ content: template, title: '下载到歌单' })
-      // 直接调用
-      // 传入配置对象，默认传入的所有对象全都当做 props 传入组件
-      // 除了在调用 createAPI 的时候传入了 events，这里对应的就是
-      // on{event name} 会被当做事件回调处理
-      const dialog = this.$createDialog({
-       type: 'alert',
+    showDialog () {
+      let url = this.songAllUrl[0].url
+      this.$createDialog({
+        type: 'alert',
         showClose: true,
-        content: template,
+        content: this.getDownLists,
         maskClosable: true,
         confirmBtn: {
           text: '下载',
@@ -429,57 +543,78 @@ export default {
           href: 'javascript:;'
         },
         onConfirm: (e) => {
-          console.log(e)
+          downloadFile(url)
+        },
+        onClick: (e) => {
+          if (e.target.className === 'url-lists_item') {
+            url = e.target.getAttribute('data-href')
+            for (let i = 0; i < e.target.parentNode.children.length; i++) {
+              if (hasClass(e.target.parentNode.children[i], 'url-lists_item__active')) {
+                removeClass(e.target.parentNode.children[i], 'url-lists_item__active')
+              }
+            }
+            addClass(e.target, 'url-lists_item__active')
+          }
         }
-      }).show();
+      }).show()
+    },
+    selectDownload (currentSong) {
+      if (this.songAllUrl.length > 0) {
+        this.showDialog()
+        return
+      }
+      this._getSongAllUrl(currentSong.mid).then(res => {
+        this.showDialog()
+      })
+      // Modal.info({ content: template, title: '下载到歌单' })
     },
     ...mapMutations({
-      setPlaylist: "SET_PLAYLIST",
-      setFullScreen: "SET_FULL_SCREEN",
-      setPlayingState: "SET_PLAYING_STATE",
-      setPlayMode: "SET_PLAY_MODE",
-      setCurrentIndex: "SET_CURRENT_INDEX"
+      setPlaylist: 'SET_PLAYLIST',
+      setFullScreen: 'SET_FULL_SCREEN',
+      setPlayingState: 'SET_PLAYING_STATE',
+      setPlayMode: 'SET_PLAY_MODE',
+      setCurrentIndex: 'SET_CURRENT_INDEX'
     })
   },
   watch: {
-    currentSong(newSong, oldSong) {
+    currentSong (newSong, oldSong) {
       if (!newSong.mid) {
-        this.setFullScreen(false);
-        this.miniShow = false;
-        this.showLists = false;
-        return;
+        this.setFullScreen(false)
+        this.miniShow = false
+        this.showLists = false
+        return
       }
       if (newSong.mid === oldSong.mid) {
-        return;
+        return
       }
-      if (!("url" in newSong)) {
-        this._getSongUrl(newSong.mid);
+      if (!('url' in newSong)) {
+        this._getSongUrl(newSong.mid)
       }
       if (this.currentLyric) {
-        this.currentLyric.stop();
-        this.currentTime = 0;
-        this.playingLyric = "";
-        this.currentLineNum = 0;
+        this.currentLyric.stop()
+        this.currentTime = 0
+        this.playingLyric = ''
+        this.currentLineNum = 0
       }
-      clearTimeout(this.timer);
+      clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        this.miniShow = true;
-        this.$refs.audio.play();
-        this.getLyric();
-      }, 1000);
+        this.miniShow = true
+        this.$refs.audio.play()
+        this.getLyric()
+      }, 1000)
     },
 
-    playing(newPlaying) {
-      const audio = this.$refs.audio;
+    playing (newPlaying) {
+      const audio = this.$refs.audio
       this.$nextTick(() => {
-        newPlaying ? audio.play() : audio.pause();
-      });
+        newPlaying ? audio.play() : audio.pause()
+      })
     },
-    fullScreen(newVal) {
+    fullScreen (newVal) {
       if (newVal) {
         setTimeout(() => {
-          this.$refs.lyricList.refresh();
-        }, 20);
+          this.$refs.lyricList.refresh()
+        }, 20)
       }
     }
   },
@@ -491,10 +626,11 @@ export default {
     AddSong,
     Star
   }
-};
+}
 </script>
 <style lang='less'>
 @import "~@/common/less/variable.less";
+@import "~@/common/less/mixin.less";
 .player {
   .normal-player {
     &_bg {
@@ -757,6 +893,37 @@ export default {
 .star {
   &_img {
     width: 0.24rem;
+  }
+}
+.url-lists {
+  ul {
+    li {
+      line-height: 0.44rem;
+      position: relative;
+    }
+  }
+  &_item {
+    line-height: 0.44rem;
+    a {
+      color: #fff;
+      font-size: @font-size-medium-x;
+    }
+    &__active{
+       &:after{
+         content: '';
+         .bg-image('select');
+         position: absolute;
+          right: 0;
+          width: 24px;
+          height: 24px;
+          top: 50%;
+          overflow: hidden;
+          background-repeat: no-repeat;
+          background-size: 100%;
+          transform: translateY(-50%);
+        }
+    }
+   
   }
 }
 </style>

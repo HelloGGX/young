@@ -20,65 +20,64 @@ import popupMixin from 'common/js/mixin/modal'
 const COMPONENT_NAME = 'modal'
 const EVENT_MASK_CLICK = 'mask_click'
 
-
 export default {
   name: COMPONENT_NAME,
   mixins: [visibilityMixin, popupMixin],
   props: {
-      type: {
-        type: String,
-        default: ''
-      },
-      mask: {
-        type: Boolean,
-        default: true
-      },
-      content: {
-        type: String,
-        default: ''
-      },
-      center: {
-        type: Boolean,
-        default: true
-      },
-      position: {
-        type: String,
-        default: ''
-      }
+    type: {
+      type: String,
+      default: ''
     },
-computed: {
-      rootClass() {
-        const cls = {
-          'modal_mask': this.mask
-        }
-        if (this.type) {
-          cls[`modal_${this.type}`] = true
-        }
-        return cls
-      },
-      containerClass() {
-        const center = this.center
-        const position = this.position
-        if (position) {
-          return {
-            [`modal-${position}`]: true
-          }
-        }
-        if (center) {
-          return {
-            'modal-center': true
-          }
+    mask: {
+      type: Boolean,
+      default: true
+    },
+    content: {
+      type: String,
+      default: ''
+    },
+    center: {
+      type: Boolean,
+      default: true
+    },
+    position: {
+      type: String,
+      default: ''
+    }
+  },
+  computed: {
+    rootClass () {
+      const cls = {
+        'modal_mask': this.mask
+      }
+      if (this.type) {
+        cls[`modal_${this.type}`] = true
+      }
+      return cls
+    },
+    containerClass () {
+      const center = this.center
+      const position = this.position
+      if (position) {
+        return {
+          [`modal-${position}`]: true
         }
       }
-    },
-  methods: {
-      maskClick(e) {
-        this.$emit(EVENT_MASK_CLICK, e)
-        if (this.maskClosable) {
-          this.hide()
+      if (center) {
+        return {
+          'modal-center': true
         }
       }
     }
+  },
+  methods: {
+    maskClick (e) {
+      this.$emit(EVENT_MASK_CLICK, e)
+      if (this.maskClosable) {
+        this.hide()
+      }
+    }
+  }
 }
 </script>
 <style lang='less' scoped>
@@ -116,7 +115,7 @@ computed: {
         height: 1px;
         background-color: rgba(0, 0, 0, .1);
         margin-left: -10px;
-      } 
+      }
     }
     &-container{
        transform: translate(100%, 100%)

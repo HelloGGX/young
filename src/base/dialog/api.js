@@ -3,5 +3,5 @@ import Dialog from './dialog.vue'
 import Vue from 'vue'
 
 export default function addDialog () {
-  createAPI(Vue, Dialog, ['confirm', 'cancel', 'toggle', 'close'], true)
+  createAPI(Vue, Dialog, ['confirm', 'cancel', 'toggle', 'close', 'click'], true)
 }
