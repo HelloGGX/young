@@ -12,12 +12,15 @@
 <script type='text/ecmascript-6'>
 import { isColors } from 'utils/colorRE'
 
+const EVENT_INPUT = 'update:value'
+const EVENT_CHANGE = 'change'
+
 export default {
   name: 'star',
-  model: {
-    prop: 'value',
-    event: 'input'
-  },
+  // model: {
+  //   prop: 'value',
+  //   event: 'input'
+  // },
   props: {
     value: Boolean,
     animate: String,
@@ -52,8 +55,8 @@ export default {
       this.toggleAnimate = !this.toggleAnimate
       this.toggleColor = !this.toggleColor
       this.active = !this.active
-      this.$emit('input', this.active)
-      this.$emit('change', this)
+      this.$emit(EVENT_INPUT, this.active)
+      this.$emit(EVENT_CHANGE, this)
     }
   },
   mounted () {

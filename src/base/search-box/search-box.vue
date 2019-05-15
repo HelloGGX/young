@@ -3,17 +3,21 @@
   <div class="search" @click="toSearch">
     <i class="search_icon icon-search"></i>
     <input type="text" class="search_input" ref="queryRef" v-model="query" :disabled="disabled" :placeholder="placeholder">
-    <i class="search_clear  icon-dismiss" v-show="query" @click="clearQuery"></i>
+    <i class="search_clear  icon-dismiss" v-show="queryVal" @click="clearQuery"></i>
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
+
+const EVENT_QUERY = 'update:queryVal'
+const EVENT_CLEAR = 'clear'
+
 export default {
-  model: {
-    prop: 'queryVal',
-    event: 'query'
-  },
+  // model: {
+  //   prop: 'queryVal',
+  //   event: 'query'
+  // },
   data () {
     return {
       query: ''
@@ -42,18 +46,18 @@ export default {
     },
     clearQuery () {
       this.query = ''
-      this.$emit('clear')
+      this.$emit(EVENT_CLEAR)
     }
   },
   created () {
     // 节流
     this.$watch('query', _.debounce((newQuery) => {
-      this.$emit('query', newQuery)
+      this.$emit(EVENT_QUERY, newQuery)
     }, 300))
   },
-  watch: {
-    queryVal (newVal) {
-      this.query = newVal
+  watch:{
+    queryVal(v){
+      this.query = v
     }
   }
 }

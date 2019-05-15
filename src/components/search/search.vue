@@ -9,7 +9,7 @@
             <img src="@/common/images/user.png" alt="">
           </template>
       </navbar>
-    <search-box :disabled="disabled" class="search_box" v-model="q" @query="query"></search-box>
+    <search-box :disabled="disabled" class="search_box" :queryVal.sync="q" ></search-box>
     <div class="history search_history" v-show="showList">
       <div class="history_title">搜索历史</div>
         <ul>
@@ -106,17 +106,7 @@ export default {
         ? this.$router.go(-1)
         : this.$router.push('/')
     },
-    query (v) {
-      if (v === '') {
-        this.results = []
-        return
-      } else {
-        setTimeout(() => {
-          this.$refs.shortcut.refresh()
-        }, 20)
-      }
-      this.search(v)
-    },
+    
     search (v) {
       this.addHistory(v)
       this.q = v
@@ -163,6 +153,19 @@ export default {
     setMoreData (dataArray) {
       const songLists = this.results.concat(dataArray)
       this.results = songLists
+    }
+  },
+  watch:{
+    q(v){
+      if (v === '') {
+        this.results = []
+        return
+      } else {
+        setTimeout(() => {
+          this.$refs.shortcut.refresh()
+        }, 20)
+      }
+      this.search(v)
     }
   }
 }

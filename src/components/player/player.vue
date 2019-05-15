@@ -87,7 +87,7 @@
             <div class="icon">
               <star
                 class="star operators_star"
-                v-model="starInit"
+                :value.sync="starInit"
                 :color="starColor"
               >
                 <img
@@ -286,6 +286,7 @@ export default {
       </div>`
     },
     getStarImg () {
+    
       return this.starInit ? starFill : starLine
     },
     showAddSong () {
