@@ -1,7 +1,5 @@
 import createAPI from 'common/js/create-api'
-import Dialog from './dialog.vue'
-import Vue from 'vue'
 
-export default function addDialog () {
+export default function addDialog (Vue, Dialog) {
   createAPI(Vue, Dialog, ['confirm', 'cancel', 'toggle', 'close', 'click'], true)
 }

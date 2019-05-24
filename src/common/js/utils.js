@@ -1,3 +1,4 @@
+import { camelize } from 'common/js/lang/string'
 
 export function normizeCount (num) {
   const si = [
@@ -32,40 +33,13 @@ export function format (interval) {
   const second = _pad(interval % 60)
   return `${minute}:${second}`
 }
-
-export function downloadFile (sUrl) {
-  // iOS devices do not support downloading. We have to inform user about this.
-  // if (/(iP)/g.test(navigator.userAgent)) {
-  //   alert('Your device does not support files downloading. Please try again in desktop browser.')
-  //   return false
-  // }
-
-  // If in Chrome or Safari - download via virtual link click
-  if (window.downloadFile.isChrome || window.downloadFile.isSafari) {
-    // Creating new link node.
-    var link = document.createElement('a')
-    link.href = sUrl
-
-    if (link.download !== undefined) {
-      // Set HTML5 download attribute. This will prevent file from opening if supported.
-      var fileName = sUrl.substring(sUrl.lastIndexOf('/') + 1, sUrl.length)
-      link.download = fileName
-    }
-
-    // Dispatching click event.
-    if (document.createEvent) {
-      var e = document.createEvent('MouseEvents')
-      e.initEvent('click', true, true)
-      link.dispatchEvent(e)
-      return true
-    }
+export function processComponentName (Component, { prefix = '', firstUpperCase = false } = {}) {
+  const name = Component.name
+  const pureName = name.replace(/^cube-/i, '')
+  let camelizeName = `${camelize(`${prefix}${pureName}`)}`
+  /* istanbul ignore if */
+  if (firstUpperCase) {
+    camelizeName = camelizeName.charAt(0).toUpperCase() + camelizeName.slice(1)
   }
-
-  // Force file download (whether supported by server).
-  if (sUrl.indexOf('?') === -1) {
-    sUrl += '?download'
-  }
-
-  window.open(sUrl, '_self')
-  return true
+  return camelizeName
 }

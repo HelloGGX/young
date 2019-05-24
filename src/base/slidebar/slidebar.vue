@@ -21,6 +21,7 @@
 const OPACITY = 0.6 // 蒙版的透明度
 const BORDER = 20
 export default {
+
   props: {
     slideshow: {
       type: Boolean,
@@ -38,6 +39,8 @@ export default {
     }
   },
   created () {
+    console.log(this.$attrs)
+
     this.touch = {
       show: this.slideshow
     }

@@ -243,8 +243,6 @@ import AddSong from 'components/add-song/add-song'
 import Star from 'base/star/Star'
 import starLine from 'common/images/star.png'
 import starFill from 'common/images/star_fill.png'
-import addDialog from 'base/dialog/api.js'
-import {downloadFile } from 'common/js/utils'
 import { addClass, removeClass, hasClass } from 'common/js/dom'
 
 const songModel = new SongModel()
@@ -327,7 +325,6 @@ export default {
   },
   created () {
     this.current = { duration: 0 }
-    addDialog()
   },
   methods: {
     toMv (song) {
@@ -544,7 +541,7 @@ export default {
           href: 'javascript:;'
         },
         onConfirm: (e) => {
-          downloadFile(url)
+          // downloadFile(url)
         },
         onClick: (e) => {
           if (e.target.className === 'url-lists_item') {

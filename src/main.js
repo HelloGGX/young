@@ -5,6 +5,7 @@ import { routerMode } from './config/env'
 import VueRouter from 'vue-router'
 import store from './store/index'
 import './registerServiceWorker'
+import apiComponents from './install'
 
 // import fastclick from 'fastclick'
 import VueLazyload from 'vue-lazyload'
@@ -20,6 +21,7 @@ Vue.use(VueLazyload, {
 })
 
 Vue.use(VueRouter)
+Vue.use(apiComponents)
 
 const router = new VueRouter({
   linkActiveClass: 'active',

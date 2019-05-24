@@ -1,4 +1,4 @@
-<!-- 歌单推荐详情页 -->
+<!-- 歌手详情页 -->
 <template>
 
   <div class="singer-detail page">
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    
+
     _getSingerDetail () {
       if (!this.singer.id) {
         this.$router.push('/singer')
