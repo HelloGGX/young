@@ -19,7 +19,7 @@
     "jsonp": "^0.2.1",
     "lodash": "^4.17.11",
     "lyric-parser": "^1.0.1",
-    "qs": "^6.5.2",
+    "qs": "^6.7.3",
     "register-service-worker": "^1.5.2",
     "velocity-animate": "^2.0.5",
     "vue": "^2.5.17",
